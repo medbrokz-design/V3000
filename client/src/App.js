@@ -3,30 +3,30 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 
 const services = [
   {
-    title: "Brand Immortality",
+    title: "Цифровое Бессмертие",
     id: "DNA",
-    desc: "Создаем цифровых двойников с 100% консистентностью. Ваш бренд-амбассадор не стареет и не требует гонораров.",
+    desc: "Создаем цифровых двойников с 100% консистентностью внешности. Ваш амбассадор не стареет.",
     icon: "🧬",
     color: "from-cyan-500 to-blue-600"
   },
   {
-    title: "Infinite Content Engine",
+    title: "Бесконечный Контент",
     id: "ICE",
-    desc: "Производство визуалов уровня Vogue за секунды. Полная замена классических фотосессий и логистики.",
+    desc: "Производство визуалов уровня Vogue за секунды. Забудьте о логистике и аренде студий.",
     icon: "⚡",
     color: "from-purple-500 to-pink-600"
   },
   {
-    title: "Market Disruption Logic",
+    title: "Логика Доминирования",
     id: "MDL",
-    desc: "Внедрение ИИ-агентов Dr. Heisenberg в бизнес-процессы. Автоматизация креатива на уровне ядра.",
+    desc: "Внедрение ИИ-агентов Dr. Heisenberg в бизнес-процессы вашего маркетинга.",
     icon: "🧠",
     color: "from-amber-500 to-orange-600"
   },
   {
-    title: "Hyper-Realistic E-com",
+    title: "Гипер-Реальный E-com",
     id: "ECOM",
-    desc: "Мгновенная примерка одежды на нейро-моделях. Снижение возвратов и взрывной рост конверсии в корзину.",
+    desc: "Мгновенная примерка на нейро-моделях. Снижение возвратов и рост конверсии.",
     icon: "🧥",
     color: "from-emerald-500 to-teal-600"
   }
@@ -34,12 +34,12 @@ const services = [
 
 const TextScramble = ({ text }) => {
   const [displayText, setDisplayText] = useState(text);
-  const chars = '!<>-_\\/[]{}—=+*^?#________';
+  const chars = '!<>-_/[]{}?#________';
   
   useEffect(() => {
     let frame = 0;
     const timer = setInterval(() => {
-      const scrambled = text.split('').map((char, i) => {
+      const scrambled = text.split('').map((char) => {
         if (char === ' ') return ' ';
         return Math.random() > 0.8 ? chars[Math.floor(Math.random() * chars.length)] : char;
       }).join('');
@@ -63,7 +63,7 @@ const Terminal = () => {
     "[NEURAL] Mapping sensory input...",
     "[GEO] Region: Global CIS identified",
     "[DATA] Injecting Nano Banana v6.2",
-    "[AUTH] Dr. Heisenberg authenticated",
+    "[AUTH] Session verified",
     "[ROI] Projected efficiency: +850%"
   ];
 
@@ -84,7 +84,7 @@ const Terminal = () => {
       </div>
       {logs.map((log, i) => (
         <div key={i} className="mb-1">
-          <span className="opacity-30">[{new Date().toLocaleTimeString([], {hour12:false})}]</span> {log}
+          <span className="opacity-30">[{new Date().toLocaleTimeString()}]</span> {log}
         </div>
       ))}
     </div>
@@ -159,8 +159,11 @@ const CustomCursor = () => {
   useEffect(() => {
     const handleMove = (e) => setPosition({ x: e.clientX, y: e.clientY });
     const handleOver = (e) => {
-      const isInteractive = e.target.closest('button, input, a, select, textarea');
-      setHovered(!!isInteractive);
+      const target = e.target;
+      if (target) {
+        const isInteractive = target.closest('button, input, a, select, textarea');
+        setHovered(!!isInteractive);
+      }
     };
     window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseover', handleOver);
@@ -191,7 +194,7 @@ function App() {
   const [status, setStatus] = useState('');
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -204,7 +207,7 @@ function App() {
         });
         const data = await response.json();
         if (data.success) {
-            setStatus('ПРОТОКОЛ ПРИНЯТ. ОЖИДАЙТЕ СВЯЗИ.');
+            setStatus('ПРОТОКОЛ ПРИНЯТ.');
             setFormData({ name: '', email: '', service: '', message: '' });
         }
     } catch (e) { setStatus('ОШИБКА КАНАЛА.'); }
@@ -215,17 +218,12 @@ function App() {
       <div className="bg-grain"></div>
       <CustomCursor />
       
-      {/* HUD Elements */}
       <div className="fixed top-8 right-8 z-50 hidden lg:block w-72">
         <Terminal />
       </div>
-      <div className="fixed bottom-8 left-8 z-50 hidden lg:block font-mono text-[8px] text-gray-700 tracking-[0.5em] vertical-text uppercase">
-        V3000 // Neural Architectures // v6.2.0
-      </div>
 
-      {/* Hero Section */}
       <header className="relative min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto overflow-hidden">
-        <motion.div style={{ opacity }} className="absolute inset-0 flex items-center justify-center -z-10">
+        <motion.div style={{ opacity: heroOpacity }} className="absolute inset-0 flex items-center justify-center -z-10">
           <div className="w-[800px] h-[800px] bg-cyan-500/5 blur-[150px] rounded-full"></div>
         </motion.div>
 
@@ -236,7 +234,7 @@ function App() {
         >
           <div className="flex items-center gap-4 mb-8">
             <div className="h-[1px] w-12 bg-cyan-500"></div>
-            <span className="font-mono text-xs text-cyan-500 tracking-[0.4em] uppercase">The Future of Media</span>
+            <span className="font-mono text-xs text-cyan-500 tracking-[0.4em] uppercase">Будущее Медиа</span>
           </div>
           
           <h1 className="text-[12vw] lg:text-[10vw] font-display font-black leading-[0.85] tracking-tighter mb-12 uppercase italic">
@@ -246,48 +244,22 @@ function App() {
 
           <div className="grid md:grid-cols-2 gap-12 items-end">
             <p className="text-xl md:text-2xl text-gray-400 font-light leading-relaxed max-w-xl">
-              Проектируем рекламные реальности, используя стратегическое ядро <strong>Nano Banana</strong>. Мы не просто создаем контент — мы меняем физику вашего маркетинга.
+              Проектируем рекламные реальности, используя стратегическое ядро <strong>Nano Banana</strong>. Мы меняем физику вашего маркетинга.
             </p>
             <div className="flex flex-col items-start gap-8">
               <motion.button 
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 className="bg-white text-black px-12 py-6 font-display font-bold text-xl uppercase tracking-widest hover:bg-cyan-500 transition-colors"
               >
-                Начать захват
+                ЗАПУСТИТЬ ПРОЕКТ
               </motion.button>
-              <div className="flex gap-10 font-mono text-[10px] text-gray-600 uppercase tracking-widest">
-                <div>[+] 2 Слота свободны</div>
-                <div>[+] Global CIS / EU / UAE</div>
-              </div>
             </div>
           </div>
         </motion.div>
       </header>
 
-      {/* Marquee GEO Section */}
-      <div className="py-12 border-y border-white/5 bg-zinc-950/50">
-        <div className="animate-marquee whitespace-nowrap">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-20 px-10 text-[10px] font-mono text-gray-800 uppercase tracking-[0.6em]">
-              <span>Dubai // UAE</span> <span>London // UK</span> <span>Aktobe // KZ</span> <span>New York // USA</span> <span>Almaty // KZ</span> <span>Singapore // SG</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <main className="max-w-7xl mx-auto px-6 pb-32">
-        {/* Services Overhaul */}
         <section className="py-40">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
-            <div>
-              <h2 className="text-6xl font-display font-bold uppercase tracking-tighter italic">Инструменты</h2>
-              <p className="text-cyan-500 font-mono text-xs uppercase tracking-widest">Operational Modules</p>
-            </div>
-            <div className="text-right max-w-xs text-xs text-gray-500 font-light leading-relaxed">
-              Каждый модуль интегрируется в вашу экосистему за 48 часов, сокращая издержки на производство визуального контента до 90%.
-            </div>
-          </div>
-
           <div className="grid md:grid-cols-2 gap-1">
             {services.map((s, i) => (
               <motion.div 
@@ -295,13 +267,11 @@ function App() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="group relative p-12 bg-zinc-950/30 border border-white/5 hover:border-cyan-500/50 transition-all duration-700 overflow-hidden"
+                className="group relative p-12 bg-zinc-950/30 border border-white/5 hover:border-cyan-500/50 transition-all duration-500 overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-12 text-7xl opacity-5 group-hover:opacity-20 transition-opacity duration-700">{s.icon}</div>
-                <div className="font-mono text-[10px] text-gray-600 mb-8 uppercase tracking-widest">Module 0{i+1} // {s.id}</div>
-                <h3 className="text-3xl font-display font-bold mb-6 group-hover:text-cyan-500 transition-colors uppercase tracking-tight italic">{s.title}</h3>
+                <h3 className="text-3xl font-display font-bold mb-6 group-hover:text-cyan-400 transition-colors uppercase tracking-tight italic">{s.title}</h3>
                 <p className="text-gray-500 text-lg font-light leading-relaxed mb-12 max-w-sm">{s.desc}</p>
-                <div className="h-[1px] w-0 group-hover:w-full bg-gradient-to-r from-cyan-500 to-transparent transition-all duration-1000"></div>
               </motion.div>
             ))}
           </div>
@@ -309,98 +279,28 @@ function App() {
 
         <ROICalculator />
 
-        {/* Process Section */}
         <section className="py-40 border-t border-white/5">
-          <div className="grid lg:grid-cols-2 gap-24">
-            <div className="sticky top-40 h-fit">
-              <h2 className="text-6xl font-display font-bold uppercase tracking-tighter italic mb-8">Метод<br/>V3000</h2>
-              <div className="p-8 border border-cyan-500/20 bg-cyan-500/5 rounded-sm italic text-gray-400 text-xl font-light">
-                "Мы не используем фильтры. Мы управляем психологией внимания через математически выверенную эстетику."
-              </div>
-            </div>
-            <div className="space-y-32">
-              {[ 
-                { t: "Анализ ДНК", d: "Глубокое погружение в ценности вашего бренда и определение уникальных триггеров аудитории." },
-                { t: "Нейро-архитектура", d: "Создание кастомных моделей и окружений, недоступных в классическом продакшене." },
-                { t: "Запуск Протокола", d: "Генерация бесконечного потока контента с нулевой стоимостью за каждую последующую единицу." }
-              ].map((step, i) => (
-                <div key={i} className="space-y-6">
-                  <div className="text-7xl font-display font-black text-white/5 tracking-tighter">0{i+1}</div>
-                  <h4 className="text-2xl font-bold uppercase italic tracking-tight">{step.t}</h4>
-                  <p className="text-gray-500 text-lg font-light leading-relaxed">{step.d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Overhaul */}
-        <section className="py-40 glass p-12 md:p-24 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 blur-[100px] -z-10"></div>
-          <div className="max-w-xl">
+          <div className="max-w-xl mx-auto">
             <h2 className="text-5xl font-display font-bold uppercase tracking-tighter mb-12 italic">Запрос Доступа</h2>
             <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Name / ID</label>
-                  <input 
-                    type="text" className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light"
-                    value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Digital Address</label>
-                  <input 
-                    type="email" className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light"
-                    value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Project Scope</label>
-                <select 
-                  className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light appearance-none"
-                  value={formData.service} onChange={(e) => setFormData({...formData, service: e.target.value})}
-                >
-                  <option value="" className="bg-black">Select Objective</option>
-                  {services.map(s => <option key={s.id} value={s.id} className="bg-black">{s.title}</option>)}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Neural Directives</label>
-                <textarea 
-                  className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light h-32 resize-none"
-                  value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})}
-                ></textarea>
-              </div>
+              <input 
+                type="text" placeholder="Ваше Имя" className="w-full bg-transparent border-b border-white/10 p-4 outline-none focus:border-cyan-500 transition-colors"
+                value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required
+              />
+              <input 
+                type="email" placeholder="Email" className="w-full bg-transparent border-b border-white/10 p-4 outline-none focus:border-cyan-500 transition-colors"
+                value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required
+              />
               <motion.button 
                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                 className="w-full py-6 border border-white text-white font-display font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all"
               >
-                Отправить в ядро
+                ОТПРАВИТЬ В ЯДРО
               </motion.button>
-              <AnimatePresence>
-                {status && (
-                  <motion.p initial={{opacity:0}} animate={{opacity:1}} className="text-center font-mono text-[10px] text-cyan-500 animate-pulse tracking-widest">
-                    {status}
-                  </motion.p>
-                )}
-              </AnimatePresence>
             </form>
           </div>
         </section>
       </main>
-
-      <footer className="py-20 border-t border-white/5 text-center px-6">
-        <div className="flex flex-col items-center gap-8 opacity-30">
-          <div className="flex gap-10 text-[10px] font-mono uppercase tracking-[0.4em]">
-            <span>Instagram</span> <span>LinkedIn</span> <span>Twitter</span>
-          </div>
-          <p className="text-[8px] font-mono tracking-[1em] uppercase">
-            © 2026 V3000 NEURAL ARCHITECTURES | SECURED BY BRAIN AI
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

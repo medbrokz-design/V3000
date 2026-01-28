@@ -7,11 +7,11 @@ const translations = {
     heroSub: "Протокол V3000",
     heroDesc: "Мировой уровень визуального контента без съемок, моделей и студий. В 10 раз быстрее, в 5 раз дешевле.",
     cta: "ЗАПРОСИТЬ АУДИТ",
-    capabilitiesTitle: "Технологии",
-    engineTitle: "Вычислительное Ядро",
-    stepTitle: "Алгоритм внедрения",
+    servicesTitle: "AI-Powered Marketing That Scales",
+    servicesSub: "Мы не просто используем ИИ — мы создаём кастомные генеративные системы, которые автоматизируют ваш контент, персонализируют коммуникации и ускоряют рост.",
+    ctaStrategy: "Забронировать сессию —→",
+    compareTitle: "Контроль реальности",
     roiTitle: "Экономика",
-    legalTitle: "Юридическая чистота",
     statusSuccess: "ПРИНЯТО.",
     statusError: "ОШИБКА."
   },
@@ -20,40 +20,40 @@ const translations = {
     heroSub: "V3000 Protocol",
     heroDesc: "World-class visual content without shoots, models, or studios. 10x faster, 5x cheaper.",
     cta: "REQUEST AUDIT",
-    capabilitiesTitle: "Capabilities",
-    engineTitle: "Compute Engine",
-    stepTitle: "The Algorithm",
+    servicesTitle: "AI-Powered Marketing That Scales",
+    servicesSub: "We don’t just use AI — we build custom generative systems that automate your content, personalize your messaging, and accelerate growth.",
+    ctaStrategy: "Book a Strategy Session —→",
+    compareTitle: "Reality Control",
     roiTitle: "Economics",
-    legalTitle: "AI Ethics & Legal",
     statusSuccess: "ACCEPTED.",
     statusError: "ERROR."
   }
 };
 
-const engineTech = [
-  { t: "Cluster H100", d: "Пиковая мощность для рендеринга 8K видео." },
-  { t: "Custom LoRA", d: "Уникальные веса под ваш брендбук." },
-  { t: "Nano Banana Core", d: "Собственная архитектура управления промптами." },
-  { t: "Zero-Latency API", d: "Мгновенная интеграция в ваш софт." }
+const services = [
+  { id: "01", icon: "📝", t: { ru: "Generative Content Studio", en: "Generative Content Studio" }, d: { ru: "Автоматизированная фабрика текстов и смыслов под ДНК вашего бренда.", en: "Automated text and meaning factory aligned with your brand DNA." } },
+  { id: "02", icon: "🎨", t: { ru: "AI Visual Design Engine", en: "AI Visual Design Engine" }, d: { ru: "Генерация графики и дизайна любой сложности без участия дизайнеров.", en: "Generation of graphics and design of any complexity without designers." } },
+  { id: "03", icon: "🎥", t: { ru: "Automated Video Production", en: "Automated Video Production" }, d: { ru: "Создание видео-кампаний и рекламы через нейро-рендеринг.", en: "Creation of video campaigns and ads via neural rendering." } },
+  { id: "04", icon: "📊", t: { ru: "Smart Ad & Campaign Automation", en: "Smart Ad & Campaign Automation" }, d: { ru: "Масштабирование рекламных креативов под тысячи сегментов аудитории.", en: "Scaling ad creatives for thousands of audience segments." } },
+  { id: "05", icon: "🤖", t: { ru: "Custom AI Agents for Marketing", en: "Custom AI Agents for Marketing" }, d: { ru: "Автономные ИИ-сотрудники, управляющие вашим маркетингом 24/7.", en: "Autonomous AI employees managing your marketing 24/7." } },
+  { id: "06", icon: "🔗", t: { ru: "RAG-Powered Brand Knowledge", en: "RAG-Powered Brand Knowledge" }, d: { ru: "Единая база знаний бренда, доступная для всех ИИ-моделей компании.", en: "Unified brand knowledge base accessible to all company AI models." } }
 ];
 
-const LegalBlock = ({ lang }) => (
-  <section className="py-40 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-700">
-    <div className="grid md:grid-cols-3 gap-10 text-[9px] font-mono uppercase tracking-[0.3em]">
-      <div className="space-y-4">
-        <h4 className="text-white font-bold">Ownership</h4>
-        <p>{lang === 'ru' ? '100% прав на контент принадлежат заказчику' : '100% IP rights transferred to client'}</p>
-      </div>
-      <div className="space-y-4">
-        <h4 className="text-white font-bold">Safety</h4>
-        <p>{lang === 'ru' ? 'Защита от дипфейков и несанкционированного доступа' : 'Deepfake protection and secure access'}</p>
-      </div>
-      <div className="space-y-4">
-        <h4 className="text-white font-bold">Ethics</h4>
-        <p>{lang === 'ru' ? 'Использование этичных наборов данных' : 'Trained on ethical datasets only'}</p>
-      </div>
+const ServiceCard = ({ s, lang, index }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: index * 0.1 }}
+    className="p-10 border border-white/5 bg-zinc-950/20 group hover:bg-white/5 transition-all duration-500 flex flex-col justify-between aspect-square md:aspect-auto"
+  >
+    <div className="space-y-6">
+      <div className="text-3xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
+      <h3 className="text-xl font-display font-light uppercase tracking-widest leading-tight">{s.t[lang]}</h3>
+      <p className="text-xs text-gray-500 font-light leading-relaxed max-w-[200px]">{s.d[lang]}</p>
     </div>
-  </section>
+    <div className="font-mono text-[8px] text-gray-700 mt-10">Module // {s.id}</div>
+  </motion.div>
 );
 
 const BeforeAfter = ({ t }) => {
@@ -62,17 +62,19 @@ const BeforeAfter = ({ t }) => {
   const handleMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-    const x = ((clientX) - rect.left) / rect.width * 100;
+    const x = ((e.clientX || (e.touches && e.touches[0].clientX)) - rect.left) / rect.width * 100;
     setSliderPos(Math.max(0, Math.min(100, x)));
   };
   return (
-    <section className="py-40 space-y-12">
-      <div ref={containerRef} className="relative aspect-[21/9] w-full overflow-hidden border border-white/5 cursor-col-resize group">
+    <section className="py-40 space-y-12 border-t border-white/5">
+      <div className="text-center space-y-4">
+        <h2 className="text-4xl font-display font-light uppercase tracking-tighter italic">{t.compareTitle}</h2>
+      </div>
+      <div ref={containerRef} className="relative aspect-[21/9] w-full overflow-hidden border border-white/5 cursor-col-resize group" onMouseMove={handleMove} onTouchMove={handleMove}>
         <div className="absolute inset-0 grayscale"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-40" alt="B" /></div>
         <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}><img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="A" /></div>
         <div className="absolute inset-y-0 w-[1px] bg-cyan-500 z-10" style={{ left: `${sliderPos}%` }}>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-cyan-500/20 backdrop-blur-3xl flex items-center justify-center text-[8px] text-cyan-500 tracking-tighter">RENDER</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-cyan-500/20 backdrop-blur-3xl flex items-center justify-center text-[8px] text-cyan-500 tracking-tighter uppercase">Compare</div>
         </div>
       </div>
     </section>
@@ -104,16 +106,16 @@ function App() {
     <div className="bg-black text-white antialiased selection:bg-white selection:text-black font-sans scroll-smooth">
       <AnimatePresence>{loading && (
         <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-black flex items-center justify-center">
-          <div className="w-8 h-[1px] bg-white/20 relative overflow-hidden"><motion.div animate={{ left: ["-100%", "100%"] }} transition={{ duration: 1, repeat: Infinity }} className="absolute inset-0 bg-white" /></div>
+          <div className="w-12 h-[1px] bg-white/20 relative overflow-hidden"><motion.div animate={{ left: ["-100%", "100%"] }} transition={{ duration: 1, repeat: Infinity }} className="absolute inset-0 bg-white" /></div>
         </motion.div>
       )}</AnimatePresence>
 
-      <nav className="fixed top-0 left-0 w-full z-[100] px-10 py-10 flex justify-between items-start mix-blend-difference">
+      <nav className="fixed top-0 left-0 w-full z-[100] px-10 py-10 flex justify-between items-center mix-blend-difference">
         <div className="font-display font-bold text-xl tracking-tighter italic">V3000</div>
         <button onClick={() => setLang(lang==='ru'?'en':'ru')} className="font-mono text-[9px] border border-white/10 px-4 py-1 rounded-full uppercase hover:bg-white hover:text-black transition-all">{lang}</button>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 pt-20">
+      <main className="max-w-7xl mx-auto px-6">
         {/* HERO */}
         <motion.section style={{ opacity: heroOpacity }} className="h-screen flex flex-col justify-center items-center text-center space-y-12">
           <span className="uppercase tracking-[0.6em] font-mono text-[9px] text-cyan-500 italic">{t.heroSub}</span>
@@ -122,17 +124,26 @@ function App() {
           <button className="px-14 py-6 bg-white text-black text-[9px] uppercase tracking-[0.5em] font-bold hover:invert transition-all rounded-sm">{t.cta}</button>
         </motion.section>
 
-        {/* ENGINE TECH */}
+        {/* NEW SERVICES SECTION */}
         <section className="py-40 border-t border-white/5">
-          <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic mb-24 text-center">{t.engineTitle}</h2>
-          <div className="grid md:grid-cols-4 gap-1">
-            {engineTech.map((tech, i) => (
-              <div key={i} className="p-10 border border-white/5 bg-zinc-950/20 group hover:bg-white/5 transition-colors">
-                <div className="text-gray-600 font-mono text-[8px] mb-6 uppercase tracking-widest">Core Module // 0{i+1}</div>
-                <h3 className="text-lg font-bold uppercase italic mb-4 group-hover:text-cyan-500 transition-colors">{tech.t}</h3>
-                <p className="text-[10px] text-gray-500 font-light leading-relaxed">{tech.d}</p>
-              </div>
+          <div className="grid lg:grid-cols-2 gap-20 items-end mb-32">
+            <h2 className="text-5xl md:text-7xl font-display font-light tracking-tighter uppercase italic leading-none">{t.servicesTitle}</h2>
+            <p className="text-gray-500 font-light text-lg max-w-md">{t.servicesSub}</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
+            {services.map((s, i) => (
+              <ServiceCard key={s.id} s={s} lang={lang} index={i} />
             ))}
+          </div>
+
+          <div className="mt-20 flex justify-center">
+            <motion.button 
+              whileHover={{ x: 10 }}
+              className="text-cyan-500 font-display font-bold uppercase tracking-[0.4em] text-xs"
+            >
+              {t.ctaStrategy}
+            </motion.button>
           </div>
         </section>
 
@@ -142,17 +153,15 @@ function App() {
         <section className="py-40 border-t border-white/5">
           <h2 className="text-6xl font-display font-light uppercase tracking-tighter italic text-center mb-32">{t.stepTitle}</h2>
           <div className="grid md:grid-cols-3 gap-px bg-white/5">
-            {["Audit", "Neural Synthesis", "Delivery"].map((step, i) => (
+            {["Audit", "Neural Synthesis", "Mass Scaling"].map((step, i) => (
               <div key={i} className="p-16 bg-black space-y-8 group hover:bg-zinc-950 transition-colors">
                 <div className="text-5xl font-display font-black text-white/5">0{i+1}</div>
                 <h3 className="text-xl uppercase tracking-widest italic leading-tight">{step}</h3>
-                <p className="text-[10px] text-gray-600 font-light uppercase tracking-widest">Phase Operational</p>
+                <div className="h-[1px] w-12 bg-white/20 group-hover:w-full transition-all duration-700"></div>
               </div>
             ))}
           </div>
         </section>
-
-        <LegalBlock lang={lang} />
 
         {/* FINAL CTA */}
         <section className="py-60 flex justify-center border-t border-white/5">
@@ -167,18 +176,12 @@ function App() {
                 <input type="text" placeholder="Company" required value={formData.company} onChange={e=>setFormData({...formData, company:e.target.value})} className="bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors" />
                 <input type="email" placeholder="Email" required value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} className="bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors" />
               </div>
-              <button className="px-16 py-8 bg-white text-black text-[9px] uppercase tracking-[0.6em] font-bold hover:invert transition-all">{t.cta}</button>
+              <button className="px-16 py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-bold hover:invert transition-all">{t.cta}</button>
               <AnimatePresence>{status && <motion.p initial={{opacity:0}} animate={{opacity:1}} className="font-mono text-[9px] tracking-widest text-cyan-500 uppercase animate-pulse pt-4">{status}</motion.p>}</AnimatePresence>
             </form>
           </div>
         </section>
       </main>
-
-      <div className="py-10 border-t border-white/5 overflow-hidden whitespace-nowrap opacity-10">
-        <div className="flex gap-20 animate-marquee font-mono text-[8px] uppercase tracking-[1em]">
-          <span>Artificial Intelligence</span> <span>Neural Production</span> <span>V3000 Engine</span> <span>Nano Banana Protocol</span> <span>Dr. Heisenberg Logic</span>
-        </div>
-      </div>
 
       <footer className="py-20 border-t border-white/5 text-center opacity-20 font-mono text-[7px] tracking-[1em]">© 2026 V3000 NEURAL ARCHITECTURES</footer>
     </div>

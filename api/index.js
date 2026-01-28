@@ -9,17 +9,18 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const TG_TOKEN = "8330712299:AAEFWZlY2vzEQAsgStCdQyMdlItsGIpgOIM";
-const TG_CHAT_ID = "8001840446";
+// БЕЗОПАСНОСТЬ: Используем переменные окружения
+const TG_TOKEN = process.env.TG_TOKEN;
+const TG_CHAT_ID = process.env.TG_CHAT_ID;
 
 app.post('/api/contact', (req, res) => {
-    const { name, email, service, message } = req.body;
+    const { name, email, company, message } = req.body;
     
-    const text = `🚀 *Новая заявка V3000*\n\n` +
-                 `👤 *Имя:* ${name}\n` +
+    const text = `🚀 *V3000 NEW LEAD*\n\n` +
+                 `👤 *Name:* ${name}\n` +
+                 `🏢 *Company:* ${company}\n` +
                  `📧 *Email:* ${email}\n` +
-                 `🛠 *Модуль:* ${service || 'Не указан'}\n` +
-                 `📝 *Сообщение:* ${message || 'Без сообщения'}`;
+                 `📝 *Msg:* ${message || 'No details'}`;
 
     if (TG_TOKEN && TG_CHAT_ID) {
         const url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
@@ -34,24 +35,22 @@ app.post('/api/contact', (req, res) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Content-Length': data.length
-            }
+            },
+            timeout: 5000 // Таймаут для стабильности
         }, (tgRes) => {
-            console.log(`Telegram status: ${tgRes.statusCode}`);
+            console.log(`TG Status: ${tgRes.statusCode}`);
         });
 
-        tgReq.on('error', (error) => {
-            console.error('Telegram error:', error);
-        });
-
+        tgReq.on('error', (e) => console.error('TG Error:', e));
         tgReq.write(data);
         tgReq.end();
+    } else {
+        console.warn('TG Credentials missing in environment');
     }
 
-    res.status(200).json({ success: true, message: 'Заявка принята! Система анализирует ваш запрос.' });
+    res.status(200).json({ success: true, message: 'Received' });
 });
 
-app.listen(PORT, () => {
-    console.log(`V3000 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Core Active: ${PORT}`));
 
 module.exports = app;

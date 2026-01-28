@@ -150,7 +150,6 @@ function App() {
 
   return (
     <div className="bg-black text-white font-sans selection:bg-cyan-500 cursor-none" ref={containerRef}>
-      <div className="fixed inset-0 opacity-0.03 pointer-events-none z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
       <CustomCursor />
       
       {/* Top Bar / Lang Switch */}

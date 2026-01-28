@@ -1,92 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 const services = [
   {
-    title: "Brand Immortality (DNA-Lock)",
-    desc: "Ваш амбассадор не стареет, не требует гонораров и работает 24/7. Создаем цифровых двойников с 100% консистентностью.",
-    icon: "🧬"
+    title: "Brand Immortality",
+    id: "DNA",
+    desc: "Создаем цифровых двойников с 100% консистентностью. Ваш бренд-амбассадор не стареет и не требует гонораров.",
+    icon: "🧬",
+    color: "from-cyan-500 to-blue-600"
   },
   {
     title: "Infinite Content Engine",
-    desc: "Производство визуалов уровня Vogue за копейки. Больше никаких съемок, моделей и аренды студий. Только чистая конверсия.",
-    icon: "⚡"
+    id: "ICE",
+    desc: "Производство визуалов уровня Vogue за секунды. Полная замена классических фотосессий и логистики.",
+    icon: "⚡",
+    color: "from-purple-500 to-pink-600"
   },
   {
     title: "Market Disruption Logic",
-    desc: "Внедрение кастомных ИИ-агентов (Dr. Heisenberg) в ваш отдел маркетинга. Автоматизируем креатив на уровне ДНК бизнеса.",
-    icon: "🧠"
+    id: "MDL",
+    desc: "Внедрение ИИ-агентов Dr. Heisenberg в бизнес-процессы. Автоматизация креатива на уровне ядра.",
+    icon: "🧠",
+    color: "from-amber-500 to-orange-600"
   },
   {
     title: "Hyper-Realistic E-com",
-    desc: "Лукбуки и каталоги любой сложности. Примерка одежды на нейро-моделях за 0.5 секунды. Продажи растут, возвраты падают.",
-    icon: "🧥"
+    id: "ECOM",
+    desc: "Мгновенная примерка одежды на нейро-моделях. Снижение возвратов и взрывной рост конверсии в корзину.",
+    icon: "🧥",
+    color: "from-emerald-500 to-teal-600"
   }
 ];
+
+const TextScramble = ({ text }) => {
+  const [displayText, setDisplayText] = useState(text);
+  const chars = '!<>-_\\/[]{}—=+*^?#________';
+  
+  useEffect(() => {
+    let frame = 0;
+    const timer = setInterval(() => {
+      const scrambled = text.split('').map((char, i) => {
+        if (char === ' ') return ' ';
+        return Math.random() > 0.8 ? chars[Math.floor(Math.random() * chars.length)] : char;
+      }).join('');
+      setDisplayText(scrambled);
+      frame++;
+      if (frame > 10) {
+        setDisplayText(text);
+        clearInterval(timer);
+      }
+    }, 100);
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return <span>{displayText}</span>;
+};
 
 const Terminal = () => {
   const [logs, setLogs] = useState([]);
   const messages = [
-    "[INIT] V3000 Core Engine...",
-    "[OK] Neural Network Layer 42 Active",
-    "[SCAN] Analyzing market trends 2026...",
-    "[ALERT] Competitor inefficiency detected: 84%",
-    "[ACTION] Optimizing ROI parameters...",
-    "[AUTH] Dr. Heisenberg session verified",
-    "[DATA] Injecting Nano Banana protocols..."
+    "[SYSTEM] V3000 Core Init...",
+    "[NEURAL] Mapping sensory input...",
+    "[GEO] Region: Global CIS identified",
+    "[DATA] Injecting Nano Banana v6.2",
+    "[AUTH] Dr. Heisenberg authenticated",
+    "[ROI] Projected efficiency: +850%"
   ];
 
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
-      setLogs(prev => [...prev.slice(-5), messages[i % messages.length]]);
+      setLogs(prev => [...prev.slice(-4), messages[i % messages.length]]);
       i++;
-    }, 2000);
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="bg-black/80 border border-cyan-900 p-4 font-mono text-[10px] text-cyan-500 rounded-lg shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+    <div className="glass p-4 font-mono text-[10px] text-cyan-400 rounded-sm">
+      <div className="flex items-center gap-2 mb-2 border-b border-white/10 pb-2">
+        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+        <span className="uppercase tracking-tighter opacity-50">Neural Link Active</span>
+      </div>
       {logs.map((log, i) => (
-        <div key={i} className="mb-1 animate-pulse">
-          <span className="opacity-50">[{new Date().toLocaleTimeString()}]</span> {log}
+        <div key={i} className="mb-1">
+          <span className="opacity-30">[{new Date().toLocaleTimeString([], {hour12:false})}]</span> {log}
         </div>
       ))}
-      <div className="w-2 h-4 bg-cyan-500 inline-block animate-bounce ml-1"></div>
     </div>
   );
 };
 
 const ROICalculator = () => {
-  const [budget, setBudget] = useState(5000);
-  const savings = Math.round(budget * 0.85);
+  const [budget, setBudget] = useState(10000);
+  const savings = Math.round(budget * 0.88);
+  const speed = (budget / 1000).toFixed(1);
 
   return (
-    <div className="bg-zinc-950 border border-cyan-900/30 p-8 md:p-12 my-20">
-      <h3 className="text-3xl font-black mb-8 uppercase italic">Прогноз экономии (ROI)</h3>
-      <div className="space-y-12">
-        <div>
-          <label className="block text-xs font-mono text-gray-500 uppercase tracking-widest mb-4">
-            Ваш текущий бюджет на контент / мес: ${budget}
-          </label>
-          <input 
-            type="range" 
-            min="1000" 
-            max="50000" 
-            step="1000"
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            className="w-full h-1 bg-gray-800 appearance-none cursor-pointer accent-cyan-500"
-          />
-        </div>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="p-6 bg-cyan-600/10 border border-cyan-500/20">
-            <div className="text-xs font-mono text-cyan-500 uppercase mb-2">Экономия с V3000</div>
-            <div className="text-4xl font-black">${savings}</div>
+    <div className="my-32 relative">
+      <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 blur opacity-10"></div>
+      <div className="relative glass p-8 md:p-16 rounded-none border border-white/10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-display font-bold uppercase tracking-tighter mb-4">Экономика Будущего</h2>
+            <p className="text-gray-500 font-mono text-xs uppercase tracking-widest">Рассчитайте преимущество протокола V3000</p>
           </div>
-          <div className="p-6 bg-white/5 border border-white/10">
-            <div className="text-xs font-mono text-gray-500 uppercase mb-2">Доп. охват за тот же бюджет</div>
-            <div className="text-4xl font-black">x6.5</div>
+          <div className="text-right">
+            <span className="text-7xl font-display font-black text-cyan-500">88%</span>
+            <p className="text-[10px] font-mono text-gray-600 uppercase">Avg. Cost Reduction</p>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-16 items-center">
+          <div className="lg:col-span-2 space-y-12">
+            <div className="space-y-6">
+              <div className="flex justify-between font-mono text-[10px] uppercase tracking-widest text-gray-400">
+                <span>Бюджет на контент</span>
+                <span className="text-white">${budget.toLocaleString()} / мес</span>
+              </div>
+              <input 
+                type="range" min="2000" max="100000" step="1000" value={budget}
+                onChange={(e) => setBudget(parseInt(e.target.value))}
+                className="w-full h-[2px] bg-gray-800 appearance-none cursor-crosshair accent-cyan-500"
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-8 border border-white/5 bg-white/[0.02]">
+                <div className="text-[10px] font-mono text-gray-500 uppercase mb-4">Ваша чистая выгода</div>
+                <div className="text-3xl font-display font-bold text-white">${savings.toLocaleString()}</div>
+              </div>
+              <div className="p-8 border border-white/5 bg-white/[0.02]">
+                <div className="text-[10px] font-mono text-gray-500 uppercase mb-4">Ускорение циклов</div>
+                <div className="text-3xl font-display font-bold text-cyan-500">x{speed}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-6 border-l border-white/5 pl-8 hidden lg:block">
+            <h4 className="font-display font-bold uppercase tracking-widest text-sm">Почему это работает?</h4>
+            <ul className="space-y-4 text-xs text-gray-500 font-light leading-relaxed">
+              <li className="flex gap-2"><span>[+]</span> Исключение аренды студий и логистики</li>
+              <li className="flex gap-2"><span>[+]</span> Работа с AI-моделями без гонораров</li>
+              <li className="flex gap-2"><span>[+]</span> Мгновенная итерация под любой тренд</li>
+              <li className="flex gap-2"><span>[+]</span> Бесконечное масштабирование контента</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -96,15 +154,14 @@ const ROICalculator = () => {
 
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isPointer, setIsPointer] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     const handleMove = (e) => setPosition({ x: e.clientX, y: e.clientY });
     const handleOver = (e) => {
-      const target = e.target;
-      setIsPointer(window.getComputedStyle(target).cursor === 'pointer' || target.tagName === 'BUTTON' || target.tagName === 'INPUT');
+      const isInteractive = e.target.closest('button, input, a, select, textarea');
+      setHovered(!!isInteractive);
     };
-    
     window.addEventListener('mousemove', handleMove);
     window.addEventListener('mouseover', handleOver);
     return () => {
@@ -114,26 +171,31 @@ const CustomCursor = () => {
   }, []);
 
   return (
-    <motion.div 
-      className="fixed top-0 left-0 w-8 h-8 border border-cyan-500 rounded-full pointer-events-none z-[9999] hidden md:block"
-      animate={{ 
-        x: position.x - 16, 
-        y: position.y - 16,
-        scale: isPointer ? 1.5 : 1,
-        backgroundColor: isPointer ? "rgba(6, 182, 212, 0.2)" : "rgba(6, 182, 212, 0)"
-      }}
-      transition={{ type: "spring", damping: 20, stiffness: 250, mass: 0.5 }}
-    />
+    <>
+      <motion.div 
+        className="fixed top-0 left-0 w-4 h-4 bg-cyan-500 rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        animate={{ x: position.x - 8, y: position.y - 8, scale: hovered ? 2.5 : 1 }}
+        transition={{ type: "spring", damping: 30, stiffness: 400, mass: 0.2 }}
+      />
+      <motion.div 
+        className="fixed top-0 left-0 w-10 h-10 border border-cyan-500/30 rounded-full pointer-events-none z-[9998] hidden md:block"
+        animate={{ x: position.x - 20, y: position.y - 20, scale: hovered ? 1.5 : 1 }}
+        transition={{ type: "spring", damping: 40, stiffness: 300, mass: 0.5 }}
+      />
+    </>
   );
 };
 
 function App() {
   const [formData, setFormData] = useState({ name: '', email: '', service: '', message: '' });
   const [status, setStatus] = useState('');
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: containerRef });
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('Инициализация протокола отправки...');
+    setStatus('ИНИЦИАЛИЗАЦИЯ...');
     try {
         const response = await fetch('/api/contact', {
             method: 'POST',
@@ -142,211 +204,201 @@ function App() {
         });
         const data = await response.json();
         if (data.success) {
-            setStatus('СИСТЕМА: Заявка принята. Анализируем ваш кейс...');
+            setStatus('ПРОТОКОЛ ПРИНЯТ. ОЖИДАЙТЕ СВЯЗИ.');
             setFormData({ name: '', email: '', service: '', message: '' });
-        } else {
-            setStatus('ОШИБКА: Сбой канала связи.');
         }
-    } catch (error) {
-        setStatus('ОШИБКА: Сервер не отвечает.');
-    }
+    } catch (e) { setStatus('ОШИБКА КАНАЛА.'); }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-cyan-500 overflow-x-hidden cursor-none">
+    <div className="bg-black text-white font-sans selection:bg-cyan-500 cursor-none" ref={containerRef}>
+      <div className="bg-grain"></div>
       <CustomCursor />
-      <div className="fixed top-10 right-10 z-50 hidden lg:block w-64">
+      
+      {/* HUD Elements */}
+      <div className="fixed top-8 right-8 z-50 hidden lg:block w-72">
         <Terminal />
       </div>
-
-      <div className="bg-cyan-600 text-black text-[10px] py-1 text-center font-bold tracking-[0.3em] uppercase">
-        Доступно только 2 слота на февраль 2026. Протокол V3000 активен.
+      <div className="fixed bottom-8 left-8 z-50 hidden lg:block font-mono text-[8px] text-gray-700 tracking-[0.5em] vertical-text uppercase">
+        V3000 // Neural Architectures // v6.2.0
       </div>
 
-      <header className="relative pt-32 pb-20 px-6 max-w-7xl mx-auto text-center" role="banner">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+      {/* Hero Section */}
+      <header className="relative min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto overflow-hidden">
+        <motion.div style={{ opacity }} className="absolute inset-0 flex items-center justify-center -z-10">
+          <div className="w-[800px] h-[800px] bg-cyan-500/5 blur-[150px] rounded-full"></div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1 }}
         >
-          <span className="text-cyan-400 font-mono text-sm tracking-[0.5em] mb-4 block animate-pulse">SYSTEM STATUS: OPERATIONAL // GEO: GLOBAL_CIS</span>
-          <h1 className="text-6xl md:text-9xl font-black mb-8 tracking-tighter leading-tight">
-            УБЕЙТЕ <span className="text-gray-600">КОНКУРЕНТОВ</span> <br/>
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent italic">НЕЙРОСЕТЯМИ</span>
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-[1px] w-12 bg-cyan-500"></div>
+            <span className="font-mono text-xs text-cyan-500 tracking-[0.4em] uppercase">The Future of Media</span>
+          </div>
+          
+          <h1 className="text-[12vw] lg:text-[10vw] font-display font-black leading-[0.85] tracking-tighter mb-12 uppercase italic">
+            <TextScramble text="Neural" /><br/>
+            <span className="text-transparent border-t border-b border-white/20 px-2">Production</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto mb-12 leading-relaxed">
-            V3000 — ведущее агентство <strong>нейросетевого маркетинга</strong>. Мы проектируем рекламные реальности, внедряем <strong>ИИ-агентов</strong> и создаем <strong>цифровых двойников</strong> для лидеров рынка.
-          </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full md:w-auto bg-white text-black px-12 py-5 rounded-none font-black hover:bg-cyan-400 transition-all duration-300 uppercase tracking-widest text-lg"
-            >
-              ЗАХВАТИТЬ РЫНОК
-            </motion.button>
-            <div className="text-left font-mono text-xs text-gray-500 border-l border-gray-800 pl-4">
-              [+] Лидеры рынка СНГ <br/>
-              [+] Глобальный охват <br/>
-              [+] GEO-Targeting 2026
+
+          <div className="grid md:grid-cols-2 gap-12 items-end">
+            <p className="text-xl md:text-2xl text-gray-400 font-light leading-relaxed max-w-xl">
+              Проектируем рекламные реальности, используя стратегическое ядро <strong>Nano Banana</strong>. Мы не просто создаем контент — мы меняем физику вашего маркетинга.
+            </p>
+            <div className="flex flex-col items-start gap-8">
+              <motion.button 
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                className="bg-white text-black px-12 py-6 font-display font-bold text-xl uppercase tracking-widest hover:bg-cyan-500 transition-colors"
+              >
+                Начать захват
+              </motion.button>
+              <div className="flex gap-10 font-mono text-[10px] text-gray-600 uppercase tracking-widest">
+                <div>[+] 2 Слота свободны</div>
+                <div>[+] Global CIS / EU / UAE</div>
+              </div>
             </div>
           </div>
         </motion.div>
       </header>
 
-      {/* GEO / Locations Section (SEO Boost) */}
-      <section className="bg-zinc-950/30 py-10 border-b border-gray-900 overflow-hidden whitespace-nowrap">
-        <div className="flex space-x-20 text-gray-800 font-bold uppercase tracking-[0.5em] text-sm opacity-50">
-          <span>Targeting: London</span>
-          <span>Targeting: Aktobe</span>
-          <span>Targeting: Dubai</span>
-          <span>Targeting: Moscow</span>
-          <span>Targeting: Almaty</span>
-          <span>Targeting: New York</span>
-        </div>
-      </section>
-
-      {/* Stats Section with Scroll Animation */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="border-y border-gray-900 bg-zinc-950/50 py-8"
-      >
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            ["140M+", "Генераций"],
-            ["4.2x", "Рост CTR"],
-            ["-85%", "Production Cost"],
-            ["24/7", "Uptime"]
-          ].map(([val, label], i) => (
-            <div key={i}>
-              <div className="text-2xl font-bold">{val}</div>
-              <div className="text-xs text-gray-600 uppercase tracking-widest">{label}</div>
+      {/* Marquee GEO Section */}
+      <div className="py-12 border-y border-white/5 bg-zinc-950/50">
+        <div className="animate-marquee whitespace-nowrap">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="flex gap-20 px-10 text-[10px] font-mono text-gray-800 uppercase tracking-[0.6em]">
+              <span>Dubai // UAE</span> <span>London // UK</span> <span>Aktobe // KZ</span> <span>New York // USA</span> <span>Almaty // KZ</span> <span>Singapore // SG</span>
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
-      {/* Services Section with Reveal */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-        <div className="mb-20">
-          <h2 className="text-4xl font-black mb-4 uppercase italic">Наши инструменты доминирования</h2>
-          <div className="h-1 w-24 bg-cyan-500"></div>
-        </div>
-        
+      <main className="max-w-7xl mx-auto px-6 pb-32">
+        {/* Services Overhaul */}
+        <section className="py-40">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+            <div>
+              <h2 className="text-6xl font-display font-bold uppercase tracking-tighter italic">Инструменты</h2>
+              <p className="text-cyan-500 font-mono text-xs uppercase tracking-widest">Operational Modules</p>
+            </div>
+            <div className="text-right max-w-xs text-xs text-gray-500 font-light leading-relaxed">
+              Каждый модуль интегрируется в вашу экосистему за 48 часов, сокращая издержки на производство визуального контента до 90%.
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-1">
+            {services.map((s, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="group relative p-12 bg-zinc-950/30 border border-white/5 hover:border-cyan-500/50 transition-all duration-700 overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 p-12 text-7xl opacity-5 group-hover:opacity-20 transition-opacity duration-700">{s.icon}</div>
+                <div className="font-mono text-[10px] text-gray-600 mb-8 uppercase tracking-widest">Module 0{i+1} // {s.id}</div>
+                <h3 className="text-3xl font-display font-bold mb-6 group-hover:text-cyan-500 transition-colors uppercase tracking-tight italic">{s.title}</h3>
+                <p className="text-gray-500 text-lg font-light leading-relaxed mb-12 max-w-sm">{s.desc}</p>
+                <div className="h-[1px] w-0 group-hover:w-full bg-gradient-to-r from-cyan-500 to-transparent transition-all duration-1000"></div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
         <ROICalculator />
 
-        <div className="grid md:grid-cols-2 gap-12">
-          {services.map((s, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="group p-10 bg-zinc-950 border border-gray-900 hover:border-cyan-500/50 transition-all duration-500 relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 p-4 text-5xl opacity-10 group-hover:opacity-100 transition-opacity duration-500">{s.icon}</div>
-              <h3 className="text-2xl font-bold mb-6 text-white group-hover:text-cyan-400 transition-colors">{s.title}</h3>
-              <p className="text-gray-500 leading-relaxed text-lg mb-8">{s.desc}</p>
-              <div className="flex items-center text-xs font-mono text-cyan-500 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
-                Узнать детали <span className="ml-2">→</span>
+        {/* Process Section */}
+        <section className="py-40 border-t border-white/5">
+          <div className="grid lg:grid-cols-2 gap-24">
+            <div className="sticky top-40 h-fit">
+              <h2 className="text-6xl font-display font-bold uppercase tracking-tighter italic mb-8">Метод<br/>V3000</h2>
+              <div className="p-8 border border-cyan-500/20 bg-cyan-500/5 rounded-sm italic text-gray-400 text-xl font-light">
+                "Мы не используем фильтры. Мы управляем психологией внимания через математически выверенную эстетику."
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Method Section - Dark Immersive */}
-      <section className="py-32 bg-cyan-600 text-black">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-          >
-            <h2 className="text-5xl font-black mb-8 uppercase leading-tight">Почему вы все еще используете людей?</h2>
-            <p className="text-xl font-medium mb-10 opacity-90 leading-relaxed">
-              Человек ошибается. Человек болеет. Человек медленный. <br/><br/>
-              Протокол V3000 базируется на ядре Nano Banana, которое анализирует 40,000 психологических триггеров в секунду.
-            </p>
-            <div className="bg-black text-white p-6 font-mono text-sm inline-block shadow-2xl">
-              > node run market_disruption.js --force
             </div>
-          </motion.div>
-          <div className="relative group">
-            <div className="absolute inset-0 bg-black blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-            <div className="border-[20px] border-black/10 aspect-square flex items-center justify-center text-8xl grayscale hover:grayscale-0 transition-all duration-700 cursor-none relative z-10 bg-cyan-500/20 backdrop-blur-sm">
-              👁️
+            <div className="space-y-32">
+              {[ 
+                { t: "Анализ ДНК", d: "Глубокое погружение в ценности вашего бренда и определение уникальных триггеров аудитории." },
+                { t: "Нейро-архитектура", d: "Создание кастомных моделей и окружений, недоступных в классическом продакшене." },
+                { t: "Запуск Протокола", d: "Генерация бесконечного потока контента с нулевой стоимостью за каждую последующую единицу." }
+              ].map((step, i) => (
+                <div key={i} className="space-y-6">
+                  <div className="text-7xl font-display font-black text-white/5 tracking-tighter">0{i+1}</div>
+                  <h4 className="text-2xl font-bold uppercase italic tracking-tight">{step.t}</h4>
+                  <p className="text-gray-500 text-lg font-light leading-relaxed">{step.d}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Contact Form with Success State */}
-      <section className="py-32 px-6 max-w-2xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-black mb-4 uppercase">Запросить доступ к системе</h2>
-          <p className="text-gray-500 uppercase tracking-widest text-sm font-bold">Мы работаем не со всеми. Только с теми, кто готов к масштабу.</p>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <input 
-              type="text" 
-              placeholder="Имя / Компания" 
-              className="w-full p-5 bg-zinc-950 border border-gray-900 rounded-none focus:border-cyan-500 outline-none transition-colors"
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              required
-            />
-            <input 
-              type="email" 
-              placeholder="Корпоративный Email" 
-              className="w-full p-5 bg-zinc-950 border border-gray-900 rounded-none focus:border-cyan-500 outline-none transition-colors"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              required
-            />
-          </div>
-          <select 
-            className="w-full p-5 bg-zinc-950 border border-gray-900 rounded-none focus:border-cyan-500 outline-none transition-colors appearance-none"
-            value={formData.service}
-            onChange={(e) => setFormData({...formData, service: e.target.value})}
-          >
-            <option value="">Цель обращения</option>
-            {services.map((s, i) => <option key={i} value={s.title}>{s.title}</option>)}
-          </select>
-          <textarea 
-            placeholder="Ваши амбиции на 2026 год" 
-            className="w-full p-5 bg-zinc-950 border border-gray-900 rounded-none h-40 focus:border-cyan-500 outline-none transition-colors"
-            value={formData.message}
-            onChange={(e) => setFormData({...formData, message: e.target.value})}
-          ></textarea>
-          <motion.button 
-            whileHover={{ scale: 1.02, backgroundColor: "#06b6d4" }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full bg-white text-black py-6 font-black transition-all duration-300 uppercase tracking-[0.2em] text-lg"
-          >
-            ОТПРАВИТЬ НА РАССМОТРЕНИЕ
-          </motion.button>
-          <AnimatePresence>
-            {status && (
-              <motion.p 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-center font-mono text-cyan-400 mt-6 text-xs animate-pulse uppercase tracking-widest"
+        {/* Contact Overhaul */}
+        <section className="py-40 glass p-12 md:p-24 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 blur-[100px] -z-10"></div>
+          <div className="max-w-xl">
+            <h2 className="text-5xl font-display font-bold uppercase tracking-tighter mb-12 italic">Запрос Доступа</h2>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Name / ID</label>
+                  <input 
+                    type="text" className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light"
+                    value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Digital Address</label>
+                  <input 
+                    type="email" className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light"
+                    value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Project Scope</label>
+                <select 
+                  className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light appearance-none"
+                  value={formData.service} onChange={(e) => setFormData({...formData, service: e.target.value})}
+                >
+                  <option value="" className="bg-black">Select Objective</option>
+                  {services.map(s => <option key={s.id} value={s.id} className="bg-black">{s.title}</option>)}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Neural Directives</label>
+                <textarea 
+                  className="w-full bg-transparent border-b border-white/10 p-2 outline-none focus:border-cyan-500 transition-colors font-light h-32 resize-none"
+                  value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})}
+                ></textarea>
+              </div>
+              <motion.button 
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                className="w-full py-6 border border-white text-white font-display font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all"
               >
-                {status}
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </form>
-      </section>
+                Отправить в ядро
+              </motion.button>
+              <AnimatePresence>
+                {status && (
+                  <motion.p initial={{opacity:0}} animate={{opacity:1}} className="text-center font-mono text-[10px] text-cyan-500 animate-pulse tracking-widest">
+                    {status}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </form>
+          </div>
+        </section>
+      </main>
 
-      <footer className="py-20 border-t border-gray-950 text-center">
-        <div className="text-[10px] text-gray-700 font-mono tracking-[1em] uppercase">
-          V3000 // NEURAL ARCHITECTURES // EST. 2026 <br/>
-          POWERED BY BRAIN AI & NANO BANANO SYSTEM
+      <footer className="py-20 border-t border-white/5 text-center px-6">
+        <div className="flex flex-col items-center gap-8 opacity-30">
+          <div className="flex gap-10 text-[10px] font-mono uppercase tracking-[0.4em]">
+            <span>Instagram</span> <span>LinkedIn</span> <span>Twitter</span>
+          </div>
+          <p className="text-[8px] font-mono tracking-[1em] uppercase">
+            © 2026 V3000 NEURAL ARCHITECTURES | SECURED BY BRAIN AI
+          </p>
         </div>
       </footer>
     </div>

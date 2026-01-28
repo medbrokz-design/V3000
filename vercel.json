@@ -7,14 +7,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/client/$1"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/client/index.html",
-      "permanent": false
+      "destination": "/client/build/$1"
     }
   ]
 }

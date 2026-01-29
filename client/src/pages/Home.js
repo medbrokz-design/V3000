@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 const translations = {
   ru: {
@@ -20,16 +22,16 @@ const translations = {
     caseTitle: "Цифры вместо слов",
     whyTitle: "Почему мы?",
     testimonialTitle: "Мнения лидеров",
+    roiTitle: "Ваша экономия",
+    roiLabel: "Бюджет на контент",
+    roiSavings: "Чистая выгода",
     finalTitle: "Готовы масштабировать маркетинг?",
     finalSub: "Без продаж — только конкретные рекомендации под ваш бизнес.",
     privacy: "🔒 Без спама. Без шаблонных презентаций.",
     statusSuccess: "ПРИНЯТО.",
     statusError: "ОШИБКА.",
     compareTitle: "Контроль реальности",
-    compareSub: "Обычный метод vs Протокол V3000",
-    roiTitle: "Ваша экономия",
-    roiLabel: "Бюджет на контент",
-    roiSavings: "Чистая выгода"
+    compareSub: "Обычный метод vs Протокол V3000"
   },
   en: {
     heroTitle: "AI Marketing That Actually Scales",
@@ -49,16 +51,16 @@ const translations = {
     caseTitle: "Real Results, Not Promises",
     whyTitle: "We’re Not Another “AI Agency”",
     testimonialTitle: "Testimonials",
+    roiTitle: "Economics",
+    roiLabel: "Content Budget",
+    roiSavings: "Net Benefit",
     finalTitle: "Ready to Scale with Real AI?",
     finalSub: "No sales pitch — just actionable insights tailored to your business.",
     privacy: "🔒 We respect your privacy. No spam. Ever.",
     statusSuccess: "ACCEPTED.",
     statusError: "ERROR.",
     compareTitle: "Reality Control",
-    compareSub: "Standard Method vs V3000 Protocol",
-    roiTitle: "Economics",
-    roiLabel: "Content Budget",
-    roiSavings: "Net Benefit"
+    compareSub: "Standard Method vs V3000 Protocol"
   }
 };
 
@@ -86,19 +88,19 @@ const CaseStudies = ({ t, lang }) => (
     <h2 className="text-4xl md:text-5xl font-display font-light uppercase tracking-tighter italic text-center">{t.caseTitle}</h2>
     <div className="grid md:grid-cols-2 gap-10 md:gap-20">
       {[
-        { t: { ru: "E-commerce Бренд", en: "E-commerce Brand" }, d: { ru: "300+ объявлений в неделю + авто-тестирование.", en: "500+ ad variants/week + auto A/B testing." }, r: { ru: "↓ CPA на 38%, ↑ ROAS 4.2x", en: "↓ CPA by 38%, ↑ ROAS 4.2x" }, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070" },
-        { t: { ru: "B2B SaaS (Германия)", en: "B2B SaaS (Germany)" }, d: { ru: "ИИ на данных продукта + интервью с клиентами.", en: "RAG-powered engine trained on product docs." }, r: { ru: "↑ Трафик на 210%, 3x больше лидов", en: "↑ Organic traffic by 210%, 3x more leads" }, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026" }
+        { id: "ecom", t: { ru: "E-commerce Бренд", en: "E-commerce Brand" }, d: { ru: "300+ объявлений в неделю + авто-тестирование.", en: "500+ ad variants/week + auto A/B testing." }, r: { ru: "↓ CPA на 38%, ↑ ROAS 4.2x", en: "↓ CPA by 38%, ↑ ROAS 4.2x" }, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070" },
+        { id: "saas", t: { ru: "B2B SaaS (Германия)", en: "B2B SaaS (Germany)" }, d: { ru: "ИИ на данных продукта + интервью с клиентами.", en: "RAG-powered engine trained on product docs." }, r: { ru: "↑ Трафик на 210%, 3x больше лидов", en: "↑ Organic traffic by 210%, 3x more leads" }, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026" }
       ].map((c, i) => (
-        <div key={i} className="space-y-6 md:space-y-8 group">
+        <Link to={`/cases/${c.id}`} key={i} className="space-y-6 md:space-y-8 group cursor-none">
           <div className="aspect-video bg-zinc-900 overflow-hidden border border-white/5">
-            <img src={c.img} className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-1000 group-hover:scale-105" alt="Case" />
+            <motion.img whileHover={{ scale: 1.05 }} src={c.img} className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-1000" alt="Case" />
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl uppercase italic">{c.t[lang]}</h3>
+            <h3 className="text-xl uppercase italic group-hover:text-cyan-500 transition-colors">{c.t[lang]}</h3>
             <p className="text-sm text-gray-500 font-light">{c.d[lang]}</p>
             <div className="inline-block px-4 py-2 border border-cyan-500/20 bg-cyan-500/5 text-cyan-500 font-mono text-[10px] uppercase tracking-widest">{c.r[lang]}</div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   </section>
@@ -174,6 +176,11 @@ const Home = ({ lang }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-6">
+      <Helmet>
+        <title>V3000 | {t.heroTitle}</title>
+        <meta name="description" content={t.heroDesc} />
+      </Helmet>
+
       {/* HERO */}
       <motion.section style={{ opacity: heroOpacity }} className="min-h-screen flex flex-col justify-center items-center text-center space-y-10 py-20">
         <div className="space-y-4 uppercase tracking-[0.6em] font-mono text-[10px] text-cyan-500 italic"><span>{t.heroSub}</span></div>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useSpring } from 'framer-motion';
+import { HelmetProvider } from 'react-helmet-async';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Cases from './pages/Cases';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import CaseDetail from './pages/CaseDetail';
 
 const CustomCursor = () => {
   const mouseX = useSpring(0, { damping: 25, stiffness: 250 });
@@ -29,7 +31,6 @@ const ScrollToTop = () => {
 const Navbar = ({ lang, setLang }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
   useEffect(() => { setIsOpen(false); }, [location]);
 
   return (
@@ -37,7 +38,6 @@ const Navbar = ({ lang, setLang }) => {
       <Link to="/" className="font-display font-bold text-xl tracking-tighter italic">V3000</Link>
       
       <div className="flex items-center gap-6 md:gap-10">
-        {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 text-[9px] uppercase tracking-widest opacity-60">
           <Link to="/cases" className="hover:opacity-100 transition-opacity">Cases</Link>
           <Link to="/services" className="hover:opacity-100 transition-opacity">Services</Link>
@@ -47,8 +47,6 @@ const Navbar = ({ lang, setLang }) => {
 
         <div className="flex items-center gap-4">
           <button onClick={() => setLang(lang==='ru'?'en':'ru')} className="font-mono text-[9px] border border-white/10 px-3 py-1 rounded-full uppercase hover:bg-white hover:text-black transition-all">{lang}</button>
-          
-          {/* Mobile Menu Toggle */}
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden flex flex-col gap-1.5 p-2">
             <motion.div animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }} className="w-6 h-[1px] bg-white origin-center" />
             <motion.div animate={isOpen ? { opacity: 0 } : { opacity: 1 }} className="w-6 h-[1px] bg-white" />
@@ -57,14 +55,11 @@ const Navbar = ({ lang, setLang }) => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 bg-black z-[-1] flex flex-col items-center justify-center gap-10 p-10 md:hidden"
+            initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 100 }}
+            className="fixed inset-0 bg-black flex flex-col items-center justify-center gap-10 p-10 md:hidden"
           >
             <Link to="/cases" className="text-3xl font-display font-light uppercase tracking-tighter italic">Cases</Link>
             <Link to="/services" className="text-3xl font-display font-light uppercase tracking-tighter italic">Services</Link>
@@ -84,29 +79,33 @@ function App() {
   useEffect(() => { setTimeout(() => setLoading(false), 1000); }, []);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="bg-black text-white antialiased selection:bg-white selection:text-black font-sans cursor-default md:cursor-none overflow-x-hidden">
-        <AnimatePresence>{loading && (
-          <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-black flex items-center justify-center">
-            <div className="w-12 h-[1px] bg-white/20 relative overflow-hidden"><motion.div animate={{ left: ["-100%", "100%"] }} transition={{ duration: 1, repeat: Infinity }} className="absolute inset-0 bg-white" /></div>
-          </motion.div>
-        )}</AnimatePresence>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="bg-black text-white antialiased selection:bg-white selection:text-black font-sans cursor-default md:cursor-none overflow-x-hidden">
+          <AnimatePresence>{loading && (
+            <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-black flex items-center justify-center">
+              <div className="w-12 h-[1px] bg-white/20 relative overflow-hidden"><motion.div animate={{ left: ["-100%", "100%"] }} transition={{ duration: 1, repeat: Infinity }} className="absolute inset-0 bg-white" /></div>
+            </motion.div>
+          )}</AnimatePresence>
 
-        <CustomCursor />
-        <Navbar lang={lang} setLang={setLang} />
+          <CustomCursor />
+          <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,_#111_0%,_#000_100%)]"></div>
+          <Navbar lang={lang} setLang={setLang} />
 
-        <Routes>
-          <Route path="/" element={<Home lang={lang} />} />
-          <Route path="/services" element={<Services lang={lang} />} />
-          <Route path="/cases" element={<Cases lang={lang} />} />
-          <Route path="/about" element={<About lang={lang} />} />
-          <Route path="/contact" element={<Contact lang={lang} />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Home lang={lang} />} />
+            <Route path="/services" element={<Services lang={lang} />} />
+            <Route path="/cases" element={<Cases lang={lang} />} />
+            <Route path="/cases/:id" element={<CaseDetail lang={lang} />} />
+            <Route path="/about" element={<About lang={lang} />} />
+            <Route path="/contact" element={<Contact lang={lang} />} />
+          </Routes>
 
-        <footer className="py-20 border-t border-white/5 text-center opacity-20 font-mono text-[7px] tracking-[1em]">© 2026 V3000 NEURAL ARCHITECTURES</footer>
-      </div>
-    </Router>
+          <footer className="py-20 border-t border-white/5 text-center opacity-20 font-mono text-[7px] tracking-[1em]">© 2026 V3000 NEURAL ARCHITECTURES</footer>
+        </div>
+      </Router>
+    </HelmetProvider>
   );
 }
 

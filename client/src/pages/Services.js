@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
 const servicesDetail = [
   {
@@ -49,6 +50,9 @@ const servicesDetail = [
 const Services = ({ lang }) => {
   return (
     <div className="min-h-screen bg-black pt-24 md:pt-32 pb-20 px-6">
+      <Helmet>
+        <title>V3000 | {lang === 'ru' ? 'Услуги' : 'Services'}</title>
+      </Helmet>
       <div className="max-w-7xl mx-auto space-y-16 md:space-y-40">
         <header className="space-y-6 md:space-y-8 max-w-4xl">
           <motion.h1 

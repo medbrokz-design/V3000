@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useSpring } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Cases from './pages/Cases';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import CaseDetail from './pages/CaseDetail';
+
+// Lazy loading pages for better initial load speed
+const Home = lazy(() => import('./pages/Home'));
+const Services = lazy(() => import('./pages/Services'));
+const Cases = lazy(() => import('./pages/Cases'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const CaseDetail = lazy(() => import('./pages/CaseDetail'));
 
 const CustomCursor = () => {
   const mouseX = useSpring(0, { damping: 25, stiffness: 250 });
@@ -27,6 +29,14 @@ const ScrollToTop = () => {
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   return null;
 };
+
+const PageLoader = () => (
+  <div className="h-screen w-full flex items-center justify-center bg-black">
+    <div className="w-8 h-[1px] bg-white/20 relative overflow-hidden">
+      <motion.div animate={{ left: ["-100%", "100%"] }} transition={{ duration: 1, repeat: Infinity }} className="absolute inset-0 bg-white" />
+    </div>
+  </div>
+);
 
 const Navbar = ({ lang, setLang }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,7 +86,11 @@ function App() {
   const [lang, setLang] = useState('ru');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { setTimeout(() => setLoading(false), 1000); }, []);
+  useEffect(() => { 
+    // Faster preloader
+    const timer = setTimeout(() => setLoading(false), 800); 
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <HelmetProvider>
@@ -93,14 +107,16 @@ function App() {
           <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,_#111_0%,_#000_100%)]"></div>
           <Navbar lang={lang} setLang={setLang} />
 
-          <Routes>
-            <Route path="/" element={<Home lang={lang} />} />
-            <Route path="/services" element={<Services lang={lang} />} />
-            <Route path="/cases" element={<Cases lang={lang} />} />
-            <Route path="/cases/:id" element={<CaseDetail lang={lang} />} />
-            <Route path="/about" element={<About lang={lang} />} />
-            <Route path="/contact" element={<Contact lang={lang} />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home lang={lang} />} />
+              <Route path="/services" element={<Services lang={lang} />} />
+              <Route path="/cases" element={<Cases lang={lang} />} />
+              <Route path="/cases/:id" element={<CaseDetail lang={lang} />} />
+              <Route path="/about" element={<About lang={lang} />} />
+              <Route path="/contact" element={<Contact lang={lang} />} />
+            </Routes>
+          </Suspense>
 
           <footer className="py-20 border-t border-white/5 text-center opacity-20 font-mono text-[7px] tracking-[1em]">© 2026 V3000 NEURAL ARCHITECTURES</footer>
         </div>

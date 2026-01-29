@@ -88,12 +88,12 @@ const CaseStudies = ({ t, lang }) => (
     <h2 className="text-4xl md:text-5xl font-display font-light uppercase tracking-tighter italic text-center">{t.caseTitle}</h2>
     <div className="grid md:grid-cols-2 gap-10 md:gap-20">
       {[
-        { id: "ecom", t: { ru: "E-commerce Бренд", en: "E-commerce Brand" }, d: { ru: "300+ объявлений в неделю + авто-тестирование.", en: "500+ ad variants/week + auto A/B testing." }, r: { ru: "↓ CPA на 38%, ↑ ROAS 4.2x", en: "↓ CPA by 38%, ↑ ROAS 4.2x" }, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070" },
-        { id: "saas", t: { ru: "B2B SaaS (Германия)", en: "B2B SaaS (Germany)" }, d: { ru: "ИИ на данных продукта + интервью с клиентами.", en: "RAG-powered engine trained on product docs." }, r: { ru: "↑ Трафик на 210%, 3x больше лидов", en: "↑ Organic traffic by 210%, 3x more leads" }, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026" }
+        { id: "ecom", t: { ru: "E-commerce Бренд", en: "E-commerce Brand" }, d: { ru: "300+ объявлений в неделю + авто-тестирование.", en: "500+ ad variants/week + auto A/B testing." }, r: { ru: "↓ CPA на 38%, ↑ ROAS 4.2x", en: "↓ CPA by 38%, ↑ ROAS 4.2x" }, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800" },
+        { id: "saas", t: { ru: "B2B SaaS (Германия)", en: "B2B SaaS (Germany)" }, d: { ru: "ИИ на данных продукта + интервью с клиентами.", en: "RAG-powered engine trained on product docs." }, r: { ru: "↑ Трафик на 210%, 3x больше лидов", en: "↑ Organic traffic by 210%, 3x more leads" }, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800" }
       ].map((c, i) => (
         <Link to={`/cases/${c.id}`} key={i} className="space-y-6 md:space-y-8 group cursor-none">
           <div className="aspect-video bg-zinc-900 overflow-hidden border border-white/5">
-            <motion.img whileHover={{ scale: 1.05 }} src={c.img} className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-1000" alt="Case" />
+            <motion.img whileHover={{ scale: 1.05 }} src={c.img} loading="lazy" className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-1000" alt="Case" />
           </div>
           <div className="space-y-4">
             <h3 className="text-xl uppercase italic group-hover:text-cyan-500 transition-colors">{c.t[lang]}</h3>
@@ -128,8 +128,8 @@ const BeforeAfter = ({ t }) => {
         onMouseMove={handleMove} 
         onTouchMove={handleMove}
       >
-        <div className="absolute inset-0 grayscale"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-40" alt="B" /></div>
-        <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}><img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="A" /></div>
+        <div className="absolute inset-0 grayscale"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop" loading="lazy" className="w-full h-full object-cover opacity-40" alt="B" /></div>
+        <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}><img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1200&auto=format&fit=crop" loading="lazy" className="w-full h-full object-cover" alt="A" /></div>
         <div className="absolute inset-y-0 w-[1px] bg-cyan-500 z-10 shadow-[0_0_20px_rgba(6,182,212,0.5)]" style={{ left: `${sliderPos}%` }}>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 backdrop-blur-2xl flex items-center justify-center text-[8px]">SCAN</div>
         </div>

@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { motion, AnimatePresence, useSpring } from 'framer-motion';
 import Home from './pages/Home';
 import Services from './pages/Services';
+import Cases from './pages/Cases';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 const CustomCursor = () => {
   const mouseX = useSpring(0, { damping: 25, stiffness: 250 });
@@ -41,10 +44,15 @@ function App() {
 
         <CustomCursor />
         
-        <nav className="fixed top-0 left-0 w-full z-[100] px-10 py-10 flex justify-between items-center mix-blend-difference">
+        <nav className="fixed top-0 left-0 w-full z-[100] px-6 md:px-10 py-10 flex justify-between items-center mix-blend-difference">
           <Link to="/" className="font-display font-bold text-xl tracking-tighter italic">V3000</Link>
-          <div className="flex items-center gap-8">
-            <Link to="/services" className="font-mono text-[9px] uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">Услуги / Services</Link>
+          <div className="flex items-center gap-4 md:gap-10">
+            <div className="hidden md:flex gap-8 text-[9px] uppercase tracking-widest opacity-60">
+              <Link to="/cases" className="hover:opacity-100 transition-opacity">Cases</Link>
+              <Link to="/services" className="hover:opacity-100 transition-opacity">Services</Link>
+              <Link to="/about" className="hover:opacity-100 transition-opacity">Manifesto</Link>
+              <Link to="/contact" className="hover:opacity-100 transition-opacity">Contact</Link>
+            </div>
             <button onClick={() => setLang(lang==='ru'?'en':'ru')} className="font-mono text-[9px] border border-white/10 px-4 py-1 rounded-full uppercase hover:bg-white hover:text-black transition-all">{lang}</button>
           </div>
         </nav>
@@ -52,6 +60,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home lang={lang} />} />
           <Route path="/services" element={<Services lang={lang} />} />
+          <Route path="/cases" element={<Cases lang={lang} />} />
+          <Route path="/about" element={<About lang={lang} />} />
+          <Route path="/contact" element={<Contact lang={lang} />} />
         </Routes>
 
         <footer className="py-20 border-t border-white/5 text-center opacity-20 font-mono text-[7px] tracking-[1em]">© 2026 V3000 NEURAL ARCHITECTURES</footer>

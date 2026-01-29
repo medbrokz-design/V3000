@@ -19,40 +19,40 @@ const Contact = ({ lang }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-32 pb-20 px-6 flex items-center justify-center">
-      <div className="max-w-2xl w-full space-y-20">
-        <header className="text-center space-y-6">
+    <div className="min-h-screen bg-black pt-24 md:pt-32 pb-20 px-6 flex items-center justify-center">
+      <div className="max-w-2xl w-full space-y-12 md:space-y-20">
+        <header className="text-center space-y-4 md:space-y-6">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="text-6xl md:text-8xl font-display font-light uppercase tracking-tighter italic text-gradient"
+            className="text-5xl md:text-8xl font-display font-light uppercase tracking-tighter italic text-gradient"
           >
             {lang === 'ru' ? 'Связь' : 'Connect'}
           </motion.h1>
-          <p className="text-gray-500 font-mono text-[9px] uppercase tracking-[0.5em]">Direct Channel to V3000 Core</p>
+          <p className="text-gray-500 font-mono text-[8px] md:text-[9px] uppercase tracking-[0.3em] md:tracking-[0.5em]">Direct Channel to V3000 Core</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-12">
-          <div className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
+          <div className="space-y-6 md:space-y-8">
             <input 
               type="text" placeholder={lang === 'ru' ? "Имя" : "Name"} required
               value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="w-full bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors"
+              className="w-full bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-xl md:text-2xl font-light outline-none focus:border-white transition-colors"
             />
             <input 
               type="email" placeholder="Email" required
               value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className="w-full bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors"
+              className="w-full bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-xl md:text-2xl font-light outline-none focus:border-white transition-colors"
             />
             <textarea 
               placeholder={lang === 'ru' ? "Ваша задача" : "Your Mission"}
               value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})}
-              className="w-full bg-transparent border-b border-white/5 py-6 text-center text-lg font-light outline-none focus:border-white transition-colors h-32 resize-none"
+              className="w-full bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-base md:text-lg font-light outline-none focus:border-white transition-colors h-32 resize-none"
             />
           </div>
-          <div className="flex flex-col items-center gap-10">
+          <div className="flex flex-col items-center gap-8 md:gap-10">
             <motion.button 
               whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-              className="px-16 py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all rounded-sm"
+              className="w-full md:w-auto px-12 py-6 md:px-16 md:py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all rounded-sm"
             >
               {lang === 'ru' ? 'ОТПРАВИТЬ' : 'EXECUTE'}
             </motion.button>
@@ -62,22 +62,22 @@ const Contact = ({ lang }) => {
           </div>
         </form>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pt-20 border-t border-white/5 opacity-30 text-center">
-          <div className="space-y-2">
-            <div className="text-[8px] font-mono uppercase tracking-widest">Telegram</div>
-            <div className="text-[10px] font-bold">@medbrokz</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 pt-12 md:pt-20 border-t border-white/5 opacity-30 text-center">
+          <div className="space-y-1 md:space-y-2">
+            <div className="text-[7px] md:text-[8px] font-mono uppercase tracking-widest">Telegram</div>
+            <div className="text-[9px] md:text-[10px] font-bold">@medbrokz</div>
           </div>
-          <div className="space-y-2">
-            <div className="text-[8px] font-mono uppercase tracking-widest">Region</div>
-            <div className="text-[10px] font-bold">Global / Aktobe</div>
+          <div className="space-y-1 md:space-y-2">
+            <div className="text-[7px] md:text-[8px] font-mono uppercase tracking-widest">Region</div>
+            <div className="text-[9px] md:text-[10px] font-bold">Global</div>
           </div>
-          <div className="space-y-2">
-            <div className="text-[8px] font-mono uppercase tracking-widest">Status</div>
-            <div className="text-[10px] font-bold text-green-500">Online</div>
+          <div className="space-y-1 md:space-y-2">
+            <div className="text-[7px] md:text-[8px] font-mono uppercase tracking-widest">Status</div>
+            <div className="text-[9px] md:text-[10px] font-bold text-green-500">Online</div>
           </div>
-          <div className="space-y-2">
-            <div className="text-[8px] font-mono uppercase tracking-widest">Response</div>
-            <div className="text-[10px] font-bold">~24h</div>
+          <div className="space-y-1 md:space-y-2">
+            <div className="text-[7px] md:text-[8px] font-mono uppercase tracking-widest">Response</div>
+            <div className="text-[9px] md:text-[10px] font-bold">~24h</div>
           </div>
         </div>
       </div>

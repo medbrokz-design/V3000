@@ -26,6 +26,57 @@ const ScrollToTop = () => {
   return null;
 };
 
+const Navbar = ({ lang, setLang }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => { setIsOpen(false); }, [location]);
+
+  return (
+    <nav className="fixed top-0 left-0 w-full z-[100] px-6 md:px-10 py-6 md:py-10 flex justify-between items-center mix-blend-difference">
+      <Link to="/" className="font-display font-bold text-xl tracking-tighter italic">V3000</Link>
+      
+      <div className="flex items-center gap-6 md:gap-10">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex gap-8 text-[9px] uppercase tracking-widest opacity-60">
+          <Link to="/cases" className="hover:opacity-100 transition-opacity">Cases</Link>
+          <Link to="/services" className="hover:opacity-100 transition-opacity">Services</Link>
+          <Link to="/about" className="hover:opacity-100 transition-opacity">Manifesto</Link>
+          <Link to="/contact" className="hover:opacity-100 transition-opacity">Contact</Link>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button onClick={() => setLang(lang==='ru'?'en':'ru')} className="font-mono text-[9px] border border-white/10 px-3 py-1 rounded-full uppercase hover:bg-white hover:text-black transition-all">{lang}</button>
+          
+          {/* Mobile Menu Toggle */}
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden flex flex-col gap-1.5 p-2">
+            <motion.div animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }} className="w-6 h-[1px] bg-white origin-center" />
+            <motion.div animate={isOpen ? { opacity: 0 } : { opacity: 1 }} className="w-6 h-[1px] bg-white" />
+            <motion.div animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }} className="w-6 h-[1px] bg-white origin-center" />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 bg-black z-[-1] flex flex-col items-center justify-center gap-10 p-10 md:hidden"
+          >
+            <Link to="/cases" className="text-3xl font-display font-light uppercase tracking-tighter italic">Cases</Link>
+            <Link to="/services" className="text-3xl font-display font-light uppercase tracking-tighter italic">Services</Link>
+            <Link to="/about" className="text-3xl font-display font-light uppercase tracking-tighter italic">Manifesto</Link>
+            <Link to="/contact" className="text-3xl font-display font-light uppercase tracking-tighter italic">Contact</Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
+
 function App() {
   const [lang, setLang] = useState('ru');
   const [loading, setLoading] = useState(true);
@@ -35,7 +86,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="bg-black text-white antialiased selection:bg-white selection:text-black font-sans cursor-none overflow-x-hidden">
+      <div className="bg-black text-white antialiased selection:bg-white selection:text-black font-sans cursor-default md:cursor-none overflow-x-hidden">
         <AnimatePresence>{loading && (
           <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-black flex items-center justify-center">
             <div className="w-12 h-[1px] bg-white/20 relative overflow-hidden"><motion.div animate={{ left: ["-100%", "100%"] }} transition={{ duration: 1, repeat: Infinity }} className="absolute inset-0 bg-white" /></div>
@@ -43,19 +94,7 @@ function App() {
         )}</AnimatePresence>
 
         <CustomCursor />
-        
-        <nav className="fixed top-0 left-0 w-full z-[100] px-6 md:px-10 py-10 flex justify-between items-center mix-blend-difference">
-          <Link to="/" className="font-display font-bold text-xl tracking-tighter italic">V3000</Link>
-          <div className="flex items-center gap-4 md:gap-10">
-            <div className="hidden md:flex gap-8 text-[9px] uppercase tracking-widest opacity-60">
-              <Link to="/cases" className="hover:opacity-100 transition-opacity">Cases</Link>
-              <Link to="/services" className="hover:opacity-100 transition-opacity">Services</Link>
-              <Link to="/about" className="hover:opacity-100 transition-opacity">Manifesto</Link>
-              <Link to="/contact" className="hover:opacity-100 transition-opacity">Contact</Link>
-            </div>
-            <button onClick={() => setLang(lang==='ru'?'en':'ru')} className="font-mono text-[9px] border border-white/10 px-4 py-1 rounded-full uppercase hover:bg-white hover:text-black transition-all">{lang}</button>
-          </div>
-        </nav>
+        <Navbar lang={lang} setLang={setLang} />
 
         <Routes>
           <Route path="/" element={<Home lang={lang} />} />

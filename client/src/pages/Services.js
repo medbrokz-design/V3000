@@ -48,13 +48,13 @@ const servicesDetail = [
 
 const Services = ({ lang }) => {
   return (
-    <div className="min-h-screen bg-black pt-32 pb-20 px-6">
-      <div className="max-w-7xl mx-auto space-y-20">
-        <header className="space-y-8 max-w-4xl">
+    <div className="min-h-screen bg-black pt-24 md:pt-32 pb-20 px-6">
+      <div className="max-w-7xl mx-auto space-y-16 md:space-y-40">
+        <header className="space-y-6 md:space-y-8 max-w-4xl">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-display font-light uppercase tracking-tighter italic text-gradient"
+            className="text-4xl md:text-7xl font-display font-light uppercase tracking-tighter italic text-gradient"
           >
             {lang === 'ru' ? 'Маркетинг на ИИ, который масштабируется' : 'AI-Powered Marketing That Scales'}
           </motion.h1>
@@ -62,7 +62,7 @@ const Services = ({ lang }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-400 font-light leading-relaxed"
+            className="text-base md:text-xl text-gray-400 font-light leading-relaxed"
           >
             {lang === 'ru' 
               ? 'Мы не просто используем ИИ — мы создаём кастомные генеративные системы, которые автоматизируют ваш контент, персонализируют коммуникации и ускоряют рост.'
@@ -70,7 +70,7 @@ const Services = ({ lang }) => {
           </motion.p>
         </header>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
           {servicesDetail.map((s, i) => (
             <motion.div 
               key={i}
@@ -78,24 +78,24 @@ const Services = ({ lang }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="p-12 bg-black space-y-8 group hover:bg-zinc-950 transition-colors"
+              className="p-8 md:p-12 bg-black space-y-6 md:space-y-8 group hover:bg-zinc-950 transition-colors"
             >
-              <div className="text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
-              <h3 className="text-xl font-display font-light uppercase tracking-widest leading-tight">
+              <div className="text-3xl md:text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
+              <h3 className="text-lg md:text-xl font-display font-light uppercase tracking-widest leading-tight">
                 {lang === 'ru' ? s.ru : s.title}
               </h3>
-              <p className="text-sm text-gray-500 font-light leading-relaxed">
+              <p className="text-xs md:text-sm text-gray-500 font-light leading-relaxed">
                 {lang === 'ru' ? s.ruDesc : s.desc}
               </p>
             </motion.div>
           ))}
         </div>
 
-        <div className="flex justify-center pt-20">
+        <div className="flex justify-center pt-10 md:pt-20">
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-16 py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all"
+            className="w-full md:w-auto px-10 py-6 md:px-16 md:py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all"
           >
             {lang === 'ru' ? 'Забронировать стратегическую сессию —→' : 'Book a Strategy Session —→'}
           </motion.button>

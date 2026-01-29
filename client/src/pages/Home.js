@@ -82,14 +82,14 @@ const testimonials = [
 ];
 
 const CaseStudies = ({ t, lang }) => (
-  <section className="py-40 border-t border-white/5 space-y-32">
-    <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic text-center">{t.caseTitle}</h2>
-    <div className="grid md:grid-cols-2 gap-20">
+  <section className="py-20 md:py-40 border-t border-white/5 space-y-20 md:y-32">
+    <h2 className="text-4xl md:text-5xl font-display font-light uppercase tracking-tighter italic text-center">{t.caseTitle}</h2>
+    <div className="grid md:grid-cols-2 gap-10 md:gap-20">
       {[
         { t: { ru: "E-commerce Бренд", en: "E-commerce Brand" }, d: { ru: "300+ объявлений в неделю + авто-тестирование.", en: "500+ ad variants/week + auto A/B testing." }, r: { ru: "↓ CPA на 38%, ↑ ROAS 4.2x", en: "↓ CPA by 38%, ↑ ROAS 4.2x" }, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070" },
         { t: { ru: "B2B SaaS (Германия)", en: "B2B SaaS (Germany)" }, d: { ru: "ИИ на данных продукта + интервью с клиентами.", en: "RAG-powered engine trained on product docs." }, r: { ru: "↑ Трафик на 210%, 3x больше лидов", en: "↑ Organic traffic by 210%, 3x more leads" }, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026" }
       ].map((c, i) => (
-        <div key={i} className="space-y-8 group">
+        <div key={i} className="space-y-6 md:space-y-8 group">
           <div className="aspect-video bg-zinc-900 overflow-hidden border border-white/5">
             <img src={c.img} className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-1000 group-hover:scale-105" alt="Case" />
           </div>
@@ -110,16 +110,22 @@ const BeforeAfter = ({ t }) => {
   const handleMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX || (e.touches && e.touches[0].clientX)) - rect.left) / rect.width * 100;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const x = (clientX - rect.left) / rect.width * 100;
     setSliderPos(Math.max(0, Math.min(100, x)));
   };
   return (
-    <div className="py-40 space-y-12 border-t border-white/5">
+    <div className="py-20 md:py-40 space-y-12 border-t border-white/5">
       <div className="text-center space-y-4">
-        <h2 className="text-4xl font-display font-light uppercase tracking-tighter italic">{t.compareTitle}</h2>
+        <h2 className="text-3xl md:text-4xl font-display font-light uppercase tracking-tighter italic">{t.compareTitle}</h2>
         <p className="font-mono text-[10px] text-gray-600 uppercase tracking-[0.3em]">{t.compareSub}</p>
       </div>
-      <div ref={containerRef} className="relative aspect-video w-full overflow-hidden border border-white/5 cursor-col-resize group" onMouseMove={handleMove} onTouchMove={handleMove}>
+      <div 
+        ref={containerRef} 
+        className="relative aspect-video w-full overflow-hidden border border-white/5 cursor-col-resize group touch-none" 
+        onMouseMove={handleMove} 
+        onTouchMove={handleMove}
+      >
         <div className="absolute inset-0 grayscale"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-40" alt="B" /></div>
         <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}><img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="A" /></div>
         <div className="absolute inset-y-0 w-[1px] bg-cyan-500 z-10 shadow-[0_0_20px_rgba(6,182,212,0.5)]" style={{ left: `${sliderPos}%` }}>
@@ -133,16 +139,16 @@ const BeforeAfter = ({ t }) => {
 const ROICalculator = ({ t }) => {
   const [budget, setBudget] = useState(10000);
   return (
-    <div className="py-40 border-t border-white/5 grid md:grid-cols-2 gap-20 items-center">
+    <div className="py-20 md:py-40 border-t border-white/5 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
       <div className="space-y-8">
-        <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic">{t.roiTitle}</h2>
+        <h2 className="text-4xl md:text-5xl font-display font-light uppercase tracking-tighter italic">{t.roiTitle}</h2>
         <div className="space-y-4">
           <div className="flex justify-between font-mono text-[10px] text-gray-500 uppercase"><span>Budget / mo</span><span>${budget.toLocaleString()}</span></div>
           <input type="range" min="2000" max="100000" step="1000" value={budget} onChange={(e) => setBudget(parseInt(e.target.value))} className="w-full h-[1px] bg-white/10 appearance-none accent-cyan-500" />
         </div>
       </div>
-      <div className="p-16 bg-white/[0.02] border border-white/5 text-center space-y-4">
-        <div className="text-7xl font-display font-bold tracking-tighter text-gradient">${(budget * 0.88).toLocaleString()}</div>
+      <div className="p-8 md:p-16 bg-white/[0.02] border border-white/5 text-center space-y-4">
+        <div className="text-5xl md:text-7xl font-display font-bold tracking-tighter text-gradient">${(budget * 0.88).toLocaleString()}</div>
         <p className="font-mono text-[9px] text-gray-500 uppercase tracking-widest">{t.roiSavings} / Year</p>
       </div>
     </div>
@@ -169,33 +175,33 @@ const Home = ({ lang }) => {
   return (
     <div className="max-w-7xl mx-auto px-6">
       {/* HERO */}
-      <motion.section style={{ opacity: heroOpacity }} className="h-screen flex flex-col justify-center items-center text-center space-y-12">
+      <motion.section style={{ opacity: heroOpacity }} className="min-h-screen flex flex-col justify-center items-center text-center space-y-10 py-20">
         <div className="space-y-4 uppercase tracking-[0.6em] font-mono text-[10px] text-cyan-500 italic"><span>{t.heroSub}</span></div>
-        <h1 className="text-[10vw] md:text-[8vw] font-display font-light tracking-tighter leading-[0.9] text-gradient">{t.heroTitle}</h1>
-        <p className="text-lg md:text-xl font-light text-gray-400 max-w-xl mx-auto leading-relaxed">{t.heroDesc}</p>
-        <button className="px-14 py-6 bg-white text-black text-[10px] uppercase tracking-[0.5em] font-black hover:invert transition-all rounded-sm">{t.cta}</button>
+        <h1 className="text-[14vw] md:text-[8vw] font-display font-light tracking-tighter leading-[0.9] text-gradient">{t.heroTitle}</h1>
+        <p className="text-base md:text-xl font-light text-gray-400 max-w-xl mx-auto leading-relaxed">{t.heroDesc}</p>
+        <button className="px-10 py-5 md:px-14 md:py-6 bg-white text-black text-[10px] uppercase tracking-[0.5em] font-black hover:invert transition-all rounded-sm">{t.cta}</button>
       </motion.section>
 
       {/* SOCIAL PROOF */}
-      <section className="py-32 border-y border-white/5 space-y-16">
+      <section className="py-20 md:py-32 border-y border-white/5 space-y-12 md:space-y-16">
         <p className="text-center font-mono text-[10px] text-gray-600 uppercase tracking-widest">{t.trustBar}</p>
-        <div className="flex flex-wrap justify-center gap-12 md:gap-20 opacity-30 grayscale filter brightness-200">
-          {partners.map(p => <span key={p} className="font-display font-bold text-xs tracking-widest">{p}</span>)}
+        <div className="flex flex-wrap justify-center gap-8 md:gap-20 opacity-30 grayscale filter brightness-200">
+          {partners.map(p => <span key={p} className="font-display font-bold text-[10px] md:text-xs tracking-widest">{p}</span>)}
         </div>
-        <div className="max-w-3xl mx-auto text-center space-y-4 pt-10">
-          <p className="text-2xl italic font-light text-gray-300 leading-relaxed">{t.trustQuote}</p>
+        <div className="max-w-3xl mx-auto text-center space-y-4 pt-6 md:pt-10">
+          <p className="text-lg md:text-2xl italic font-light text-gray-300 leading-relaxed">{t.trustQuote}</p>
           <p className="text-[10px] font-mono text-cyan-500 uppercase tracking-widest">{t.trustAuthor}</p>
         </div>
       </section>
 
       {/* SERVICES PREVIEW */}
-      <section className="py-40">
-        <h2 className="text-5xl md:text-7xl font-display font-light tracking-tighter uppercase italic mb-32 leading-none">{t.servicesTitle}</h2>
+      <section className="py-20 md:py-40">
+        <h2 className="text-4xl md:text-7xl font-display font-light tracking-tighter uppercase italic mb-16 md:mb-32 leading-none">{t.servicesTitle}</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
           {servicesList.map(s => (
-            <div key={s.id} className="p-12 bg-black space-y-8 group hover:bg-zinc-950 transition-colors">
-              <div className="text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
-              <h3 className="text-xl font-display font-light uppercase tracking-widest leading-tight">{s.t[lang]}</h3>
+            <div key={s.id} className="p-8 md:p-12 bg-black space-y-6 md:space-y-8 group hover:bg-zinc-950 transition-colors">
+              <div className="text-3xl md:text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
+              <h3 className="text-lg md:text-xl font-display font-light uppercase tracking-widest leading-tight">{s.t[lang]}</h3>
               <p className="text-xs text-gray-500 font-light leading-relaxed">{s.d[lang]}</p>
             </div>
           ))}
@@ -205,17 +211,17 @@ const Home = ({ lang }) => {
       <BeforeAfter t={t} />
 
       {/* WORKFLOW */}
-      <section className="py-40 border-t border-white/5">
-        <h2 className="text-6xl font-display font-light uppercase tracking-tighter italic text-center mb-32">{t.howTitle}</h2>
+      <section className="py-20 md:py-40 border-t border-white/5">
+        <h2 className="text-4xl md:text-6xl font-display font-light uppercase tracking-tighter italic text-center mb-16 md:mb-32">{t.howTitle}</h2>
         <div className="grid md:grid-cols-3 gap-px bg-white/5 border border-white/5">
           {[
             {t: t.step1, d: t.step1D},
             {t: t.step2, d: t.step2D},
             {t: t.step3, d: t.step3D}
           ].map((step, i) => (
-            <div key={i} className="p-16 bg-black space-y-8">
-              <div className="text-5xl font-display font-black text-white/5">0{i+1}</div>
-              <h3 className="text-xl uppercase tracking-widest italic leading-tight">{step.t}</h3>
+            <div key={i} className="p-8 md:p-16 bg-black space-y-6 md:space-y-8">
+              <div className="text-4xl md:text-5xl font-display font-black text-white/5">0{i+1}</div>
+              <h3 className="text-lg md:text-xl uppercase tracking-widest italic leading-tight">{step.t}</h3>
               <p className="text-sm text-gray-500 font-light leading-relaxed">{step.d}</p>
             </div>
           ))}
@@ -225,9 +231,9 @@ const Home = ({ lang }) => {
       <CaseStudies t={t} lang={lang} />
 
       {/* WHY US */}
-      <section className="py-40 border-t border-white/5 space-y-20">
-        <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic">{t.whyTitle}</h2>
-        <div className="grid md:grid-cols-3 gap-12">
+      <section className="py-20 md:py-40 border-t border-white/5 space-y-12 md:space-y-20">
+        <h2 className="text-4xl md:text-5xl font-display font-light uppercase tracking-tighter italic">{t.whyTitle}</h2>
+        <div className="grid md:grid-cols-3 gap-10 md:gap-12">
           {[
             { t: { ru: "Системы, а не промпты", en: "Systems, Not Prompts" }, d: { ru: "Мы проектируем воркфлоу, а не просто копируем GPT.", en: "We engineer workflows, not just paste prompts." } },
             { t: { ru: "Точность над хайпом", en: "Accuracy Over Hype" }, d: { ru: "RAG-архитектура исключает галлюцинации.", en: "RAG architecture eliminates hallucinations." } },
@@ -235,7 +241,7 @@ const Home = ({ lang }) => {
           ].map((item, i) => (
             <div key={i} className="space-y-4">
               <div className="text-cyan-500 font-mono text-[9px]">MODULE 0{i+1}</div>
-              <h3 className="text-xl uppercase italic">{item.t[lang]}</h3>
+              <h3 className="text-lg md:text-xl uppercase italic">{item.t[lang]}</h3>
               <p className="text-xs text-gray-500 font-light leading-relaxed">{item.d[lang]}</p>
             </div>
           ))}
@@ -243,12 +249,12 @@ const Home = ({ lang }) => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-40 border-t border-white/5">
-        <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic mb-20">{t.testimonialTitle}</h2>
-        <div className="grid md:grid-cols-2 gap-20">
+      <section className="py-20 md:py-40 border-t border-white/5">
+        <h2 className="text-4xl md:text-5xl font-display font-light uppercase tracking-tighter italic mb-16 md:mb-20">{t.testimonialTitle}</h2>
+        <div className="grid md:grid-cols-2 gap-10 md:gap-20">
           {testimonials.map((test, i) => (
-            <div key={i} className="space-y-8 p-12 bg-zinc-950/30 border border-white/5">
-              <p className="text-xl font-light italic text-gray-400">"{test.q[lang]}"</p>
+            <div key={i} className="space-y-6 md:space-y-8 p-8 md:p-12 bg-zinc-950/30 border border-white/5">
+              <p className="text-lg md:text-xl font-light italic text-gray-400">"{test.q[lang]}"</p>
               <p className="text-[10px] font-mono text-cyan-500 uppercase tracking-widest">— {test.a}</p>
             </div>
           ))}
@@ -258,21 +264,21 @@ const Home = ({ lang }) => {
       <ROICalculator t={t} />
 
       {/* FINAL FORM */}
-      <section className="py-60 flex justify-center border-t border-white/5">
-        <div className="max-w-2xl w-full text-center space-y-20">
+      <section className="py-20 md:py-60 flex justify-center border-t border-white/5">
+        <div className="max-w-2xl w-full text-center space-y-12 md:space-y-20">
           <div className="space-y-6">
-            <h2 className="text-5xl md:text-7xl font-display font-light tracking-tighter uppercase italic text-gradient">{t.finalTitle}</h2>
+            <h2 className="text-4xl md:text-7xl font-display font-light tracking-tighter uppercase italic text-gradient">{t.finalTitle}</h2>
             <p className="text-gray-500 text-sm font-light tracking-widest uppercase">{t.finalSub}</p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
             <div className="grid gap-2">
-              <input type="text" placeholder="Name" required value={formData.name} onChange={e=>setFormData({...formData, name:e.target.value})} className="bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors" />
-              <input type="text" placeholder="Company" required value={formData.company} onChange={e=>setFormData({...formData, company:e.target.value})} className="bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors" />
-              <input type="email" placeholder="Email" required value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} className="bg-transparent border-b border-white/5 py-6 text-center text-2xl font-light outline-none focus:border-white transition-colors" />
-              <textarea placeholder="Your biggest marketing bottleneck?" value={formData.bottleneck} onChange={e=>setFormData({...formData, bottleneck:e.target.value})} className="bg-transparent border-b border-white/5 py-6 text-center text-lg font-light outline-none focus:border-white transition-colors h-32 resize-none" />
+              <input type="text" placeholder="Name" required value={formData.name} onChange={e=>setFormData({...formData, name:e.target.value})} className="bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-xl md:text-2xl font-light outline-none focus:border-white transition-colors" />
+              <input type="text" placeholder="Company" required value={formData.company} onChange={e=>setFormData({...formData, company:e.target.value})} className="bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-xl md:text-2xl font-light outline-none focus:border-white transition-colors" />
+              <input type="email" placeholder="Email" required value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} className="bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-xl md:text-2xl font-light outline-none focus:border-white transition-colors" />
+              <textarea placeholder="Your biggest marketing bottleneck?" value={formData.bottleneck} onChange={e=>setFormData({...formData, bottleneck:e.target.value})} className="bg-transparent border-b border-white/5 py-4 md:py-6 text-center text-base md:text-lg font-light outline-none focus:border-white transition-colors h-32 resize-none" />
             </div>
             <div className="space-y-6">
-              <button className="px-16 py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all">{t.ctaShort}</button>
+              <button className="px-12 py-6 md:px-16 md:py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all">{t.ctaShort}</button>
               <p className="text-[9px] font-mono text-gray-600 uppercase tracking-widest opacity-50">{t.privacy}</p>
             </div>
             <AnimatePresence>{status && <motion.p initial={{opacity:0}} animate={{opacity:1}} className="font-mono text-[9px] tracking-widest text-cyan-500 uppercase animate-pulse pt-4">{status}</motion.p>}</AnimatePresence>

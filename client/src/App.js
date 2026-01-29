@@ -3,22 +3,28 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'fra
 
 const translations = {
   ru: {
-    heroTitle: "Маркетинг на ИИ, который реально работает",
-    heroSub: "БЕЗ ПУСТЫХ ОБЕЩАНИЙ",
+    heroTitle: "Замените продакшн",
+    heroSub: "Протокол V3000",
     heroDesc: "Создаём кастомные ИИ-системы для бизнесов, которые хотят стабильный рост, а не просто «крутые шортсы».",
     cta: "ЗАБРОНИРОВАТЬ СЕССИЮ",
+    ctaShort: "ПОЛУЧИТЬ ПЛАН БЕСПЛАТНО",
     trustBar: "Нам доверяют команды и основатели из",
     trustQuote: "«Снизили стоимость лида на 47% за 3 недели — без единого часа ручной работы над контентом».",
-    trustAuthor: "— Алексей, IT-стартап",
+    trustAuthor: "— Алексей, маркетолог, IT-стартап",
     servicesTitle: "Что мы делаем",
     servicesSub: "Мы проектируем системы, а не просто пишем промпты.",
     howTitle: "Просто. Прозрачно. С контролем.",
     step1: "Бриф", step1D: "Вы рассказываете о задачах, стиле бренда и инструментах.",
     step2: "Настройка", step2D: "Мы создаём ИИ-воркфлоу под ваш бизнес — без шаблонов.",
     step3: "Масштаб", step3D: "Вы получаете контент, аналитику и растёте без перегруза.",
+    compareTitle: "Контроль реальности",
+    compareSub: "Обычный метод vs Протокол V3000",
     caseTitle: "Цифры вместо слов",
     whyTitle: "Почему мы?",
     testimonialTitle: "Мнения лидеров",
+    roiTitle: "Ваша экономия",
+    roiLabel: "Бюджет на контент",
+    roiSavings: "Чистая выгода",
     finalTitle: "Готовы масштабировать маркетинг?",
     finalSub: "Без продаж — только конкретные рекомендации под ваш бизнес.",
     privacy: "🔒 Без спама. Без шаблонных презентаций.",
@@ -30,6 +36,7 @@ const translations = {
     heroSub: "WITHOUT THE HYPE",
     heroDesc: "We build custom generative systems for brands that want predictable growth, not just viral experiments.",
     cta: "BOOK A STRATEGY SESSION",
+    ctaShort: "GET MY FREE STRATEGY PLAN",
     trustBar: "Trusted by founders and marketing teams at",
     trustQuote: "“Reduced our cost per lead by 47% in 3 weeks — with zero manual content creation.”",
     trustAuthor: "— Sarah K., Growth Lead",
@@ -39,9 +46,14 @@ const translations = {
     step1: "Brief", step1D: "You share your goals, brand voice, and tech stack.",
     step2: "Build", step2D: "We design a custom AI workflow — no off-the-shelf templates.",
     step3: "Scale", step3D: "You get high-quality output, real-time analytics, and room to grow.",
+    compareTitle: "Reality Control",
+    compareSub: "Standard Method vs V3000 Protocol",
     caseTitle: "Real Results, Not Promises",
     whyTitle: "We’re Not Another “AI Agency”",
     testimonialTitle: "Testimonials",
+    roiTitle: "Economics",
+    roiLabel: "Content Budget",
+    roiSavings: "Net Benefit",
     finalTitle: "Ready to Scale with Real AI?",
     finalSub: "No sales pitch — just actionable insights tailored to your business.",
     privacy: "🔒 We respect your privacy. No spam. Ever.",
@@ -72,33 +84,51 @@ const testimonials = [
   }
 ];
 
-const CaseStudies = ({ t, lang }) => (
-  <section className="py-40 border-t border-white/5 space-y-32">
-    <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic text-center">{t.caseTitle}</h2>
-    <div className="grid md:grid-cols-2 gap-20">
-      <div className="space-y-8 group">
-        <div className="aspect-video bg-zinc-900 overflow-hidden border border-white/5">
-          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80" className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-1000" alt="Ecom" />
-        </div>
-        <div className="space-y-4">
-          <h3 className="text-xl uppercase italic">E-commerce Brand</h3>
-          <p className="text-sm text-gray-500 font-light">{lang === 'ru' ? "300+ объявлений в неделю + авто-тестирование." : "500+ ad variants/week + auto A/B testing."}</p>
-          <div className="text-cyan-500 font-mono text-[10px] uppercase tracking-widest">{lang === 'ru' ? "↓ CPA на 38%, ↑ ROAS 4.2x" : "↓ CPA by 38%, ↑ ROAS 4.2x"}</div>
-        </div>
+const BeforeAfter = ({ t }) => {
+  const [sliderPos, setSliderPos] = useState(50);
+  const containerRef = useRef(null);
+  const handleMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const x = ((clientX) - rect.left) / rect.width * 100;
+    setSliderPos(Math.max(0, Math.min(100, x)));
+  };
+  return (
+    <div className="py-40 space-y-12 border-t border-white/5">
+      <div className="text-center space-y-4">
+        <h2 className="text-4xl font-display font-light uppercase tracking-tighter italic">{t.compareTitle}</h2>
+        <p className="font-mono text-[10px] text-gray-600 uppercase tracking-[0.3em]">{t.compareSub}</p>
       </div>
-      <div className="space-y-8 group">
-        <div className="aspect-video bg-zinc-900 overflow-hidden border border-white/5">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80" className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-1000" alt="SaaS" />
-        </div>
-        <div className="space-y-4">
-          <h3 className="text-xl uppercase italic">B2B SaaS</h3>
-          <p className="text-sm text-gray-500 font-light">{lang === 'ru' ? "ИИ на данных продукта + интервью с клиентами." : "RAG-powered engine trained on product docs."}</p>
-          <div className="text-cyan-500 font-mono text-[10px] uppercase tracking-widest">{lang === 'ru' ? "↑ Трафик на 210%, 3x больше лидов" : "↑ Traffic by 210%, 3x more leads"}</div>
+      <div ref={containerRef} className="relative aspect-video w-full overflow-hidden border border-white/5 cursor-col-resize group" onMouseMove={handleMove} onTouchMove={handleMove}>
+        <div className="absolute inset-0 grayscale"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-40" alt="B" /></div>
+        <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}><img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="A" /></div>
+        <div className="absolute inset-y-0 w-[1px] bg-cyan-500 z-10 shadow-[0_0_20px_rgba(6,182,212,0.5)]" style={{ left: `${sliderPos}%` }}>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-white/20 backdrop-blur-2xl flex items-center justify-center text-[8px]">SCAN</div>
         </div>
       </div>
     </div>
-  </section>
-);
+  );
+};
+
+const ROICalculator = ({ t }) => {
+  const [budget, setBudget] = useState(10000);
+  return (
+    <div className="py-40 border-t border-white/5 grid md:grid-cols-2 gap-20 items-center">
+      <div className="space-y-8">
+        <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic">{t.roiTitle}</h2>
+        <div className="space-y-4">
+          <div className="flex justify-between font-mono text-[10px] text-gray-500 uppercase"><span>Budget / mo</span><span>${budget.toLocaleString()}</span></div>
+          <input type="range" min="2000" max="100000" step="1000" value={budget} onChange={(e) => setBudget(parseInt(e.target.value))} className="w-full h-[1px] bg-white/10 appearance-none accent-cyan-500" />
+        </div>
+      </div>
+      <div className="p-16 bg-white/[0.02] border border-white/5 text-center space-y-4">
+        <div className="text-7xl font-display font-bold tracking-tighter text-gradient">${(budget * 0.88).toLocaleString()}</div>
+        <p className="font-mono text-[9px] text-gray-500 uppercase tracking-widest">{t.roiSavings} / Year</p>
+      </div>
+    </div>
+  );
+};
 
 const CustomCursor = () => {
   const mouseX = useSpring(0, { damping: 25, stiffness: 250 });
@@ -153,7 +183,7 @@ function App() {
         <motion.section style={{ opacity: heroOpacity }} className="h-screen flex flex-col justify-center items-center text-center space-y-12">
           <div className="space-y-4 uppercase tracking-[0.6em] font-mono text-[10px] text-cyan-500 italic"><span>{t.heroSub}</span></div>
           <h1 className="text-[10vw] md:text-[8vw] font-display font-light tracking-tighter leading-[0.9] text-gradient">{t.heroTitle}</h1>
-          <p className="text-lg md:text-xl font-light text-gray-400 max-w-xl mx-auto">{t.heroDesc}</p>
+          <p className="text-lg md:text-xl font-light text-gray-400 max-w-xl mx-auto leading-relaxed">{t.heroDesc}</p>
           <button className="px-14 py-6 bg-white text-black text-[10px] uppercase tracking-[0.5em] font-black hover:invert transition-all rounded-sm">{t.cta}</button>
         </motion.section>
 
@@ -174,7 +204,7 @@ function App() {
           <h2 className="text-5xl md:text-7xl font-display font-light tracking-tighter uppercase italic mb-32 leading-none">{t.servicesTitle}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 border border-white/5">
             {services.map(s => (
-              <div key={s.id} className="p-12 bg-black space-y-8 group hover:bg-zinc-950 transition-colors h-full">
+              <div key={s.id} className="p-12 bg-black space-y-8 group hover:bg-zinc-950 transition-colors">
                 <div className="text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
                 <h3 className="text-xl font-display font-light uppercase tracking-widest leading-tight">{s.t[lang]}</h3>
                 <p className="text-xs text-gray-500 font-light leading-relaxed">{s.d[lang]}</p>
@@ -182,6 +212,9 @@ function App() {
             ))}
           </div>
         </section>
+
+        {/* BEFORE AFTER */}
+        <BeforeAfter t={t} />
 
         {/* WORKFLOW */}
         <section className="py-40 border-t border-white/5">
@@ -201,7 +234,30 @@ function App() {
           </div>
         </section>
 
-        <CaseStudies t={t} lang={lang} />
+        {/* CASE STUDIES */}
+        <section className="py-40 border-t border-white/5 space-y-32">
+          <h2 className="text-5xl font-display font-light uppercase tracking-tighter italic text-center">{t.caseTitle}</h2>
+          <div className="grid md:grid-cols-2 gap-20">
+            {[
+              { t: { ru: "E-commerce Бренд", en: "E-commerce Brand" }, d: { ru: "300+ объявлений в неделю + авто-тестирование.", en: "500+ ad variants/week + auto A/B testing." }, r: { ru: "↓ CPA на 38%, ↑ ROAS 4.2x", en: "↓ CPA by 38%, ↑ ROAS 4.2x" }, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070" },
+              { t: { ru: "B2B SaaS (Германия)", en: "B2B SaaS (Germany)" }, d: { ru: "ИИ на данных продукта + интервью с клиентами.", en: "RAG-powered engine trained on product docs." }, r: { ru: "↑ Трафик на 210%, 3x больше лидов", en: "↑ Organic traffic by 210%, 3x more leads" }, img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026" }
+            ].map((c, i) => (
+              <div key={i} className="space-y-8 group">
+                <div className="aspect-video bg-zinc-900 overflow-hidden border border-white/5">
+                  <img src={c.img} className="w-full h-full object-cover opacity-40 group-hover:opacity-80 transition-all duration-1000 group-hover:scale-105" alt="Case" />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-xl uppercase italic">{c.t[lang]}</h3>
+                  <p className="text-sm text-gray-500 font-light">{c.d[lang]}</p>
+                  <div className="inline-block px-4 py-2 border border-cyan-500/20 bg-cyan-500/5 text-cyan-500 font-mono text-[10px] uppercase tracking-widest">{c.r[lang]}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ROI CALCULATOR */}
+        <ROICalculator t={t} />
 
         {/* WHY US */}
         <section className="py-40 border-t border-white/5 space-y-20">

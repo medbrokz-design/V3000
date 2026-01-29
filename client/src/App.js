@@ -96,6 +96,11 @@ function App() {
     <HelmetProvider>
       <Router>
         <ScrollToTop />
+        <AnimatePresence>
+          <Helmet>
+            <html lang={lang} />
+          </Helmet>
+        </AnimatePresence>
         <div className="bg-black text-white antialiased selection:bg-white selection:text-black font-sans cursor-default md:cursor-none overflow-x-hidden">
           <AnimatePresence>{loading && (
             <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-black flex items-center justify-center">

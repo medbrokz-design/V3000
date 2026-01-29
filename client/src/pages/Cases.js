@@ -38,6 +38,7 @@ const Cases = ({ lang }) => {
     <div className="min-h-screen bg-black pt-24 md:pt-32 pb-20 px-6">
       <Helmet>
         <title>V3000 | {lang === 'ru' ? 'Архив Реальностей' : 'Reality Archive'}</title>
+        <meta name="description" content={lang === 'ru' ? 'Кейсы использования ИИ в маркетинге.' : 'AI marketing case studies.'} />
       </Helmet>
       <div className="max-w-7xl mx-auto space-y-20 md:space-y-40">
         <header className="space-y-6 md:space-y-8 max-w-3xl">
@@ -54,19 +55,22 @@ const Cases = ({ lang }) => {
 
         <div className="space-y-32 md:space-y-60">
           {casesDetail.map((c, i) => (
-            <motion.div 
+            <article 
               key={i}
-              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               className={`grid lg:grid-cols-2 gap-10 md:gap-20 items-center ${i % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}
             >
-              <Link to={`/cases/${c.id}`} className="aspect-[4/3] bg-zinc-900 overflow-hidden border border-white/5 group cursor-none">
-                <img src={c.img} loading="lazy" className="w-full h-full object-cover opacity-40 group-hover:opacity-80 group-hover:scale-105 transition-all duration-1000" alt="Case" />
+              <Link to={`/cases/${c.id}`} aria-label={`View case study: ${c.title[lang]}`} className="aspect-[4/3] bg-zinc-900 overflow-hidden border border-white/5 group cursor-none">
+                <img src={c.img} loading="lazy" className="w-full h-full object-cover opacity-40 group-hover:opacity-80 group-hover:scale-105 transition-all duration-1000" alt={`Visual representation of ${c.title[lang]}`} />
               </Link>
               <div className="space-y-6 md:space-y-10">
-                <div className="space-y-4">
+                <header className="space-y-4">
                   <div className="font-mono text-[9px] md:text-[10px] text-cyan-500 uppercase tracking-[0.4em]">Project 0{i+1} // {c.client}</div>
-                  <Link to={`/cases/${c.id}`} className="text-3xl md:text-5xl font-display font-light uppercase italic hover:text-cyan-500 transition-colors cursor-none">{c.title[lang]}</Link>
-                </div>
+                  <h2 className="text-3xl md:text-5xl font-display font-light uppercase italic">
+                    <Link to={`/cases/${c.id}`} className="hover:text-cyan-500 transition-colors cursor-none" aria-label={`Read more about ${c.title[lang]}`}>
+                      {c.title[lang]}
+                    </Link>
+                  </h2>
+                </header>
                 <div className="space-y-4 md:space-y-6 text-gray-400 font-light text-sm md:text-base">
                   <p><strong>{lang==='ru'?'Задача:':'Challenge:'}</strong> {c.challenge[lang]}</p>
                   <p><strong>{lang==='ru'?'Решение:':'Solution:'}</strong> {c.solution[lang]}</p>
@@ -77,7 +81,7 @@ const Cases = ({ lang }) => {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </article>
           ))}
         </div>
       </div>

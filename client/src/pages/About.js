@@ -1,9 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
 const About = ({ lang }) => {
   return (
     <div className="min-h-screen bg-black pt-24 md:pt-32 pb-20 px-6">
+      <Helmet>
+        <title>V3000 | {lang === 'ru' ? 'Манифест' : 'Manifesto'}</title>
+        <meta name="description" content={lang === 'ru' ? 'Наша философия и технологический стек.' : 'Our philosophy and tech stack.'} />
+      </Helmet>
       <div className="max-w-7xl mx-auto space-y-20 md:space-y-40">
         <header className="space-y-6 md:space-y-8 max-w-4xl">
           <motion.h1 
@@ -41,29 +46,29 @@ const About = ({ lang }) => {
             <h2 className="text-2xl md:text-3xl font-display font-light uppercase italic">The Stack</h2>
             <div className="grid grid-cols-2 gap-6 md:gap-10">
               <div className="space-y-1">
-                <div className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Compute</div>
-                <div className="text-white text-xs md:text-sm">H100 Cluster</div>
+                <h3 className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Compute</h3>
+                <p className="text-white text-xs md:text-sm">H100 Cluster</p>
               </div>
               <div className="space-y-1">
-                <div className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Architecture</div>
-                <div className="text-white text-xs md:text-sm">RAG / LoRA</div>
+                <h3 className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Architecture</h3>
+                <p className="text-white text-xs md:text-sm">RAG / LoRA</p>
               </div>
               <div className="space-y-1">
-                <div className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Latency</div>
-                <div className="text-white text-xs md:text-sm">Zero-Delay</div>
+                <h3 className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Latency</h3>
+                <p className="text-white text-xs md:text-sm">Zero-Delay</p>
               </div>
               <div className="space-y-1">
-                <div className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Resolution</div>
-                <div className="text-white text-xs md:text-sm">8K Native</div>
+                <h3 className="text-cyan-500 font-mono text-[8px] md:text-[10px] uppercase">Resolution</h3>
+                <p className="text-white text-xs md:text-sm">8K Native</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="py-20 md:py-40 text-center space-y-8">
-          <h2 className="text-3xl md:text-4xl font-display font-light uppercase tracking-widest opacity-20">V3000 // 2026</h2>
+        <footer className="py-20 md:py-40 text-center space-y-8">
+          <div className="text-3xl md:text-4xl font-display font-light uppercase tracking-widest opacity-20">V3000 // 2026</div>
           <p className="text-[8px] md:text-[10px] font-mono text-gray-700 uppercase tracking-[0.5em] md:tracking-[1em]">Secure. Private. Neural.</p>
-        </section>
+        </footer>
       </div>
     </div>
   );

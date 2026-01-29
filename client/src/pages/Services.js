@@ -52,6 +52,7 @@ const Services = ({ lang }) => {
     <div className="min-h-screen bg-black pt-24 md:pt-32 pb-20 px-6">
       <Helmet>
         <title>V3000 | {lang === 'ru' ? 'Услуги' : 'Services'}</title>
+        <meta name="description" content={lang === 'ru' ? 'Кастомные генеративные системы для вашего бизнеса.' : 'Custom generative systems for your business.'} />
       </Helmet>
       <div className="max-w-7xl mx-auto space-y-16 md:space-y-40">
         <header className="space-y-6 md:space-y-8 max-w-4xl">
@@ -84,10 +85,10 @@ const Services = ({ lang }) => {
               transition={{ delay: i * 0.1 }}
               className="p-8 md:p-12 bg-black space-y-6 md:space-y-8 group hover:bg-zinc-950 transition-colors"
             >
-              <div className="text-3xl md:text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
-              <h3 className="text-lg md:text-xl font-display font-light uppercase tracking-widest leading-tight">
+              <div className="text-3xl md:text-4xl opacity-20 group-hover:opacity-100 transition-opacity" aria-hidden="true">{s.icon}</div>
+              <h2 className="text-lg md:text-xl font-display font-light uppercase tracking-widest leading-tight">
                 {lang === 'ru' ? s.ru : s.title}
-              </h3>
+              </h2>
               <p className="text-xs md:text-sm text-gray-500 font-light leading-relaxed">
                 {lang === 'ru' ? s.ruDesc : s.desc}
               </p>
@@ -99,6 +100,7 @@ const Services = ({ lang }) => {
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            aria-label={lang === 'ru' ? 'Забронировать сессию' : 'Book Session'}
             className="w-full md:w-auto px-10 py-6 md:px-16 md:py-8 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all"
           >
             {lang === 'ru' ? 'Забронировать стратегическую сессию —→' : 'Book a Strategy Session —→'}

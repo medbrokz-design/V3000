@@ -18,14 +18,15 @@ const translations = {
     caseTitle: "Результаты",
     whyTitle: "Почему мы?",
     testimonialTitle: "Отзывы",
-    roiTitle: "Экономия",
+    roiTitle: "Ваша экономия",
     roiLabel: "Бюджет",
     roiSavings: "Выгода",
     finalTitle: "Масштабируйте маркетинг",
     finalSub: "Бесплатная сессия и аудит вашего бренда.",
     privacy: "🔒 No spam. Secure.",
     statusSuccess: "ПРИНЯТО.",
-    statusError: "ОШИБКА."
+    statusError: "ОШИБКА.",
+    compareTitle: "Контроль реальности"
   },
   en: {
     heroTitle: "AI Marketing That Scales",
@@ -48,7 +49,8 @@ const translations = {
     finalSub: "Free strategy session and actionable insights.",
     privacy: "🔒 Secure. Private.",
     statusSuccess: "ACCEPTED.",
-    statusError: "ERROR."
+    statusError: "ERROR.",
+    compareTitle: "Reality Control"
   }
 };
 
@@ -63,7 +65,7 @@ const ServicesList = memo(({ lang }) => (
       { id: "03", icon: "🎥", t: { ru: "Video Prod", en: "Video Prod" } }
     ].map(s => (
       <div key={s.id} className="p-8 md:p-12 bg-black space-y-6 hover:bg-zinc-950 transition-colors">
-        <div className="text-3xl opacity-20">{s.icon}</div>
+        <div className="text-3xl opacity-20" aria-hidden="true">{s.icon}</div>
         <h3 className="text-lg uppercase tracking-widest">{s.t[lang]}</h3>
       </div>
     ))}
@@ -76,22 +78,25 @@ const BeforeAfter = memo(({ t }) => {
   const handleMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX || (e.touches?.[0].clientX)) - rect.left) / rect.width * 100;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const x = (clientX - rect.left) / rect.width * 100;
     setSliderPos(Math.max(0, Math.min(100, x)));
   };
   return (
-    <div className="py-20 md:py-40 space-y-12 border-t border-white/5">
+    <section className="py-20 md:py-40 space-y-12 border-t border-white/5">
+      <h2 className="text-3xl md:text-4xl font-display font-light uppercase tracking-tighter italic text-center">{t.compareTitle}</h2>
       <div 
         ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}
         className="relative aspect-video w-full overflow-hidden border border-white/5 cursor-col-resize touch-none"
+        aria-label="Comparison slider showing before and after neural production"
       >
-        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=60&auto=format" className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale" alt="B" />
+        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=60&auto=format" className="absolute inset-0 w-full h-full object-cover opacity-40 grayscale" alt="Standard production example" />
         <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}>
-          <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=60&auto=format" className="w-full h-full object-cover" alt="A" />
+          <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=60&auto=format" className="w-full h-full object-cover" alt="V3000 Neural production example" />
         </div>
         <div className="absolute inset-y-0 w-px bg-white/50" style={{ left: `${sliderPos}%` }} />
       </div>
-    </div>
+    </section>
   );
 });
 
@@ -116,16 +121,18 @@ const Home = ({ lang }) => {
     <div className="max-w-7xl mx-auto px-6">
       <Helmet>
         <title>V3000 | {t.heroTitle}</title>
+        <meta name="description" content={t.heroDesc} />
       </Helmet>
 
       <motion.section style={{ opacity: heroOpacity }} className="min-h-screen flex flex-col justify-center items-center text-center space-y-10 py-20 motion-safe-gpu">
         <span className="uppercase tracking-[0.6em] font-mono text-[10px] text-cyan-500"><span>{t.heroSub}</span></span>
         <h1 className="text-[14vw] md:text-[8vw] font-display font-light tracking-tighter leading-none text-gradient">{t.heroTitle}</h1>
         <p className="text-base md:text-xl font-light text-gray-400 max-w-xl mx-auto">{t.heroDesc}</p>
-        <button className="px-10 py-5 bg-white text-black text-[10px] uppercase tracking-[0.5em] font-black hover:invert transition-all">{t.cta}</button>
+        <button aria-label={t.cta} className="px-10 py-5 bg-white text-black text-[10px] uppercase tracking-[0.5em] font-black hover:invert transition-all">{t.cta}</button>
       </motion.section>
 
       <section className="py-20 border-y border-white/5 space-y-12">
+        <h2 className="sr-only">Our Partners</h2>
         <div className="flex flex-wrap justify-center gap-10 opacity-30 grayscale brightness-200">
           {partners.map(p => <span key={p} className="font-display font-bold text-[10px] tracking-widest">{p}</span>)}
         </div>
@@ -147,11 +154,16 @@ const Home = ({ lang }) => {
           <h2 className="text-4xl md:text-7xl font-display font-light tracking-tighter uppercase italic text-gradient">{t.finalTitle}</h2>
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid gap-2">
-              <input type="text" placeholder="Name" required value={formData.name} onChange={e=>setFormData({...formData, name:e.target.value})} className="bg-transparent border-b border-white/5 py-4 text-center text-xl font-light outline-none focus:border-white transition-colors" />
-              <input type="text" placeholder="Company" required value={formData.company} onChange={e=>setFormData({...formData, company:e.target.value})} className="bg-transparent border-b border-white/5 py-4 text-center text-xl font-light outline-none focus:border-white transition-colors" />
-              <input type="email" placeholder="Email" required value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} className="bg-transparent border-b border-white/5 py-4 text-center text-xl font-light outline-none focus:border-white transition-colors" />
+              <label htmlFor="name" className="sr-only">Name</label>
+              <input id="name" type="text" placeholder="Name" aria-label="Your Name" required value={formData.name} onChange={e=>setFormData({...formData, name:e.target.value})} className="bg-transparent border-b border-white/5 py-4 text-center text-xl font-light outline-none focus:border-white transition-colors" />
+              
+              <label htmlFor="company" className="sr-only">Company</label>
+              <input id="company" type="text" placeholder="Company" aria-label="Company Name" required value={formData.company} onChange={e=>setFormData({...formData, company:e.target.value})} className="bg-transparent border-b border-white/5 py-4 text-center text-xl font-light outline-none focus:border-white transition-colors" />
+              
+              <label htmlFor="email" className="sr-only">Email</label>
+              <input id="email" type="email" placeholder="Email" aria-label="Your Email" required value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} className="bg-transparent border-b border-white/5 py-4 text-center text-xl font-light outline-none focus:border-white transition-colors" />
             </div>
-            <button className="px-12 py-6 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all">{t.ctaShort}</button>
+            <button type="submit" aria-label={t.ctaShort} className="px-12 py-6 bg-white text-black text-[10px] uppercase tracking-[0.6em] font-black hover:invert transition-all">{t.ctaShort}</button>
           </form>
         </div>
       </section>

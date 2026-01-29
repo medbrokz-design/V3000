@@ -176,8 +176,8 @@ function App() {
             {services.map(s => (
               <div key={s.id} className="p-12 bg-black space-y-8 group hover:bg-zinc-950 transition-colors h-full">
                 <div className="text-4xl opacity-20 group-hover:opacity-100 transition-opacity">{s.icon}</div>
-                <h3 className="text-xl font-display font-light uppercase tracking-widest leading-tight">{s[lang].title}</h3>
-                <p className="text-xs text-gray-500 font-light leading-relaxed">{s[lang].desc}</p>
+                <h3 className="text-xl font-display font-light uppercase tracking-widest leading-tight">{s.t[lang]}</h3>
+                <p className="text-xs text-gray-500 font-light leading-relaxed">{s.d[lang]}</p>
               </div>
             ))}
           </div>

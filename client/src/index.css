@@ -7,44 +7,40 @@
     scroll-behavior: smooth;
     background-color: #000;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Улучшение рендеринга текста */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
-/* Apple-style Blur & Materials */
-.material-dark {
-  background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: saturate(180%) blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* GPU Acceleration для плавных анимаций */
+.motion-safe-gpu {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Оптимизация шрифтов */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-display: swap;
 }
 
 .text-gradient {
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* Ускорение отрисовки градиентов */
+  will-change: opacity;
 }
 
-/* Cinematic Transitions */
-.reveal-up {
-  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-  mask-size: 100% 200%;
-  mask-position: 0% 0%;
-}
-
-.stroke-text {
-  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.3);
-  color: transparent;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 4px; }
+/* Улучшенный скроллбар */
+::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
 
-@keyframes slow-pan {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.1); }
-}
-
-.animate-slow-pan {
-  animation: slow-pan 20s ease-in-out infinite alternate;
+/* Скрытие курсора только на мощных устройствах */
+@media (pointer: fine) {
+  .custom-cursor-active { cursor: none; }
 }
